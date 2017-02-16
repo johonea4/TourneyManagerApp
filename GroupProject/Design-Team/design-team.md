@@ -1,4 +1,4 @@
-Design Information Document
+﻿Design Information Document
 =========================
 
 Requirements:
