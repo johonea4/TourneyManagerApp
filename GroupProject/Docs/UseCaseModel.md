@@ -1,18 +1,61 @@
 # Use Case Model
 
-*This is the template for your use case model. The parts in italics are concise explanations of what should go in the corresponding sections and should not appear in the final document.*
-
-**Author**: \<person or team name\>
+**Author**: Team09
 
 ## 1 Use Case Diagram
 
-*This section should contain a use case diagram with all the actors and use cases for the system, suitably connected.*
+![Class Diagram](./images/Use_Case_Diagram.png)
 
 ## 2 Use Case Descriptions
 
-*For each use case in the use case diagram, this section should contain a description, with the following elements:*
+### Use Case 001
 
-- *Requirements: High-level description of what the use case must allow the user to do.*
-- *Pre-conditions: Conditions that must be true before the use case is run.*
-- *Post-conditions Conditions that must be true once the use case is run.*
-- *Scenarios: Sequence of events that characterize the use case. This part may include multiple scenarios, for normal, alternate, and exceptional event sequences. These scenarios may be expressed as a list of steps in natural language or as sequence diagrams.*
+![Class Diagram](./images/UseCase001.png)
+
+### Use Case 002
+
+![Class Diagram](./images/UseCase002.png)
+
+### Use Case 003
+
+![Class Diagram](./images/UseCase003.png)
+
+### Use Case 004
+
+![Class Diagram](./images/UseCase004.png)
+
+### Use Case 005
+
+![Class Diagram](./images/UseCase005.png)
+
+### Use Case 006
+
+![Class Diagram](./images/UseCase006.png)
+
+### Use Case 007
+
+![Class Diagram](./images/UseCase007.png)
+
+### Use Case 008
+
+![Class Diagram](./images/UseCase008.png)
+
+### Use Case 009
+
+![Class Diagram](./images/UseCase009.png)
+
+### Use Case 010
+
+![Class Diagram](./images/UseCase010.png)
+
+### Use Case 011
+
+![Class Diagram](./images/UseCase011.png)
+
+### Use Case 012
+
+![Class Diagram](./images/UseCase012.png)
+
+### Use Case 013
+
+![Class Diagram](./images/UseCase013.png)
