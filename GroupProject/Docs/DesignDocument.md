@@ -1,36 +1,44 @@
 # Design Document
 
-*This is the template for your design document. The parts in italics are concise explanations of what should go in the corresponding sections and should not appear in the final document.*
-
-**Author**: \<person or team name\>
+**Author**: Team09
 
 ## 1 Design Considerations
 
-*The subsections below describe the issues that need to be addressed or resolved prior to or while completing the design, as well as issues that may influence the design process.*
-
 ### 1.1 Assumptions
 
-*Describe any assumption, background, or dependencies of the software, its use, the operational environment, or significant project issues.*
-
+   The app will be developed using Android Studio version v2.1+.
+   The minimum target for the Android app is API Level 19, and the maximum is API 25.
+   The Android app will be tested using Android Emulator (AVD).
+   The app will use the cloud hosted Google Firebase database to store the data.
+   The app will not be available in Google play.
+   The app will not provide Authentication support.
+   Since the app uses Google Firebase database which is hosted on the cloud, the device must be connected to a internet network in order to make the database API calls. However it does provide the multi-device support. Opening the app in any device would restore the previous state of the app.
+   In case of database failures because of network or the cloud service itself, the app will not provide any offline support.
+   
 ### 1.2 Constraints
 
-*Describe any constraints on the system that have a significant impact on the design of the system.*
-
+	Since the database is cloud hosted, the reliability of the database becomes paramount to the functioning of the app.
+	The smooth functioning of the app on every android device cannot guaranteed since we will be testing the app on only some emulators.
+	
+	
 ### 1.3 System Environment
 
-*Describe the hardware and software that the system must operate in and interact with.*
+	The Android app is designed to be compatible with Android running mobile device which has a support for API level of 19 up to 25.
+	The Android app will also be compatible with any Android mobile device emulator with the same API support level. 
+	App is dependent on cloud hosted database Google Firebase.
+
 
 ## 2 Architectural Design
 
-*The architecture provides the high-level design view of a system and provides a basis for more detailed design work. These subsections describe the top-level components of the system you are building and their relationships.*
-
 ### 2.1 Component Diagram
 
-*This section should provide and describe a diagram that shows the various components and how they are connected. This diagram shows the logical/functional components of the system, where each component represents a cluster of related functionality. In the case of simple systems, where there is a single component, this diagram may be unnecessary; in these cases, simply state so and concisely state why.*
+	The Android app is simple component which has integrations with a cloud hosted database (Google Firebase). All the resources necessary for the app such as keyboard, touch capability, network are provided by the Android operating system. 
+	
+![Image of Design 1](./images/Component_Diagram.png)
 
 ### 2.2 Deployment Diagram
-
-*This section should describe how the different components will be deployed on actual hardware devices. Similar to the previous subsection, this diagram may be unnecessary for simple systems; in these cases, simply state so and concisely state why.*
+	
+	The app is packaged as a Android application and then run on a Android operation system. Since this is a very simple application, deployment diagram is not necessary.
 
 ## 3 Low-Level Design
 
