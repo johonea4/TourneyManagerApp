@@ -42,7 +42,7 @@
 
 ## 3 Low-Level Design
 
-*Describe the low-level design for each of the system components identified in the previous section. For each component, you should provide details in the following UML diagrams to show its internal structure.*
+The application design makes the database the central part of the application. The user will use the Android interface, and based on the mode of operation, will enter data into and query the database for information they wish to use. The class diagram below displays the methods used for providing an abstraction of information to and from the database.
 
 ### 3.1 Class Diagram
 
