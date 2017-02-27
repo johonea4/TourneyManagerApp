@@ -41,12 +41,15 @@ public class ManagerModeActivity extends Activity
     @Override
     protected void onResume()
     {
+        super.onResume();
         setButtons();
     }
 
     @Override
-    protected void onRestart()
+    protected void onStart()
     {
+        super.onStart();
+        appMode = m_app.getappMode();
         setButtons();
     }
 
@@ -54,29 +57,35 @@ public class ManagerModeActivity extends Activity
     {
         if(m_app.isTourneyRunning())
         {
+            m_app.setTourneyRunning(false);
             setButtons();
         }
         else
         {
-            Intent createLauncher = new Intent(ManagerModeActivity.this, CreateTourney.class);
+            Intent createLauncher = new Intent(ManagerModeActivity.this, CreateTourneyActivity.class);
+            createLauncher.putExtra("ManagerCreate",true);
             startActivity(createLauncher);
         }
     }
     public void ManagePlayersLauncher(View view)
     {
-
+        Intent playersLauncher = new Intent(ManagerModeActivity.this,ManagePlayersActivity.class);
+        startActivity(playersLauncher);
     }
     public void PlayerTotalsLauncher(View view)
     {
-
+        Intent playersTotalsLauncher = new Intent(ManagerModeActivity.this,PlayerTotalsActivity.class);
+        startActivity(playersTotalsLauncher);
     }
     public void TournamentTotalsLauncher(View view)
     {
-
+        Intent tourneyTotalsLauncher = new Intent(ManagerModeActivity.this,TourneyTotalsActivity.class);
+        startActivity(tourneyTotalsLauncher);
     }
     public void RoundsLauncher(View view)
     {
-
+        Intent roundListLauncher = new Intent(ManagerModeActivity.this,RoundsListActivity.class);
+        startActivity(roundListLauncher);
     }
 
     //Private members

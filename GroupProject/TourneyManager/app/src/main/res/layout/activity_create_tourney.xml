@@ -8,13 +8,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.gatech.seclass.tourneymanager.CreateTourney">
+    tools:context="edu.gatech.seclass.tourneymanager.CreateTourneyActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -89,11 +91,6 @@
                 android:layout_weight="1.16" />
         </LinearLayout>
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/deckChoiceSpinner" />
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -117,14 +114,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/addPlayerButton"
-                    android:layout_weight="0.30" />
+                    android:layout_weight="0.30"
+                    android:onClick="onAddPlayer" />
 
                 <Button
                     android:text="-"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/removePlayerButton"
-                    android:layout_weight="0.30" />
+                    android:layout_weight="0.30"
+                    android:onClick="onRemovePlayer" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -160,7 +159,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.33">
+            android:layout_weight="1.06">
 
             <TextView
                 android:text="1st"
@@ -209,7 +208,8 @@
             android:text="Start Tournament"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tourneyStartButton" />
+            android:id="@+id/tourneyStartButton"
+            android:onClick="onStartTournament" />
 
     </LinearLayout>
 </RelativeLayout>
