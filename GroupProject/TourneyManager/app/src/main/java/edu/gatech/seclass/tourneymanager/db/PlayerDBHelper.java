@@ -14,19 +14,10 @@ import java.util.List;
  * Created by rugrani on 3/2/17.
  */
 
-public class PlayerDBHelper extends SQLiteOpenHelper {
+public class PlayerDBHelper extends AbstractHelper {
 
-    // All Static variables
-    // Database Version
-    private static final int DATABASE_VERSION = 1;
-
-    // Database Name
-    private static final String DATABASE_NAME = "tourneydb";
-
-    // Contacts table name
     private static final String TABLE_PLAYER = "player";
 
-    // Contacts Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_USER_NAME = "user_name";
@@ -34,7 +25,7 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
     private static final String KEY_DECK_CHOICE = "deck_choice";
 
     public PlayerDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context);
     }
 
     @Override
@@ -57,12 +48,12 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Adding new contact
+    // Adding new player
     public void addPlayer(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_USER_NAME, player.getUserName()); // Contact Name
+        values.put(KEY_USER_NAME, player.getUserName()); // Contact user Name
         values.put(KEY_NAME, player.getName()); // Contact Name
         values.put(KEY_PH_NO, player.getPhoneNumber()); // Contact Phone Number
         values.put(KEY_DECK_CHOICE, player.getDeckChoice());
@@ -72,14 +63,14 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    // Getting single contact
-    public Player getContact(String userName) {
+    // Getting single player
+    public Player getPlayer(String userName) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_PLAYER, new String[] {
                 KEY_ID, KEY_NAME, KEY_USER_NAME, KEY_PH_NO, KEY_DECK_CHOICE },
                 KEY_USER_NAME + "=?",
-                new String[] { String.valueOf(userName) }, null, null, null, null);
+                new String[] { userName }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -105,7 +96,7 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
                 player.setUserName(cursor.getString(2));
                 player.setPhoneNumber(cursor.getString(3));
                 player.setDeckChoice(cursor.getString(4));
-                // Adding contact to list
+                // Adding player to list
                 playerList.add(player);
             } while (cursor.moveToNext());
         }
@@ -116,7 +107,7 @@ public class PlayerDBHelper extends SQLiteOpenHelper {
     public void deletePlayer(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PLAYER, KEY_USER_NAME + " = ?",
-                new String[] { String.valueOf(player.getUserName()) });
+                new String[] { player.getUserName() });
         db.close();
     }
 }
