@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class ManagePlayersActivity extends Activity {
         super.onStart();
         m_mode = m_app.getappMode();
         populatePlayers();
+        setListCallBack();
     }
     public void onCreatePlayer(View view)
     {
@@ -49,6 +52,21 @@ public class ManagePlayersActivity extends Activity {
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, players);
         playerList.setAdapter(adapter);
+    }
+    public void setListCallBack()
+    {
+        playerList.setOnItemClickListener(new ListView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView item = (TextView)view;
+                if(!item.getText().toString().isEmpty())
+                {
+                    Intent i = new Intent(ManagePlayersActivity.this,PlayerInfoActivity.class);
+                    i.putExtra("playerUserName",item.getText().toString());
+                    startActivity(i);
+                }
+            }
+        });
     }
 
     private TourneyManagerApp m_app;

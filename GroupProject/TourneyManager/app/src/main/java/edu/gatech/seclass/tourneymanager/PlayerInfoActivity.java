@@ -52,11 +52,13 @@ public class PlayerInfoActivity extends Activity {
             addPlayer.setText("Update Player");
             prizeList.setVisibility(ListView.VISIBLE);
             addPlayer.setVisibility(Button.VISIBLE);
+            String p = getIntent().getStringExtra("playerUserName");
 
         }
         else
         {
             addPlayer.setVisibility(Button.INVISIBLE);
+            String p = getIntent().getStringExtra("playerUserName");
         }
 
         Spinner deckSpinner = (Spinner) findViewById(R.id.deckChoiceSpinner);

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-//import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
@@ -235,7 +234,7 @@ public class CreateTourneyActivity extends Activity {
         dialog.show();
 
     }
-    //TODO: Remove player from list that is currently selected
+
     public void onRemovePlayer(View view)
     {
         if(currentPlayer != null)
