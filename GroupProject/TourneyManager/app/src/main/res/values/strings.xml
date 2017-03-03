@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">TourneyManager</string>
     <string name="pref_file">TourneyManagerPref</string>
+    <string-array name="deckChoice_array">
+        <item>Engineer</item>
+        <item>Buzz</item>
+        <item>Sideways</item>
+        <item>Wreck</item>
+        <item>T</item>
+        <item>RAT</item>
+    </string-array>
 </resources>

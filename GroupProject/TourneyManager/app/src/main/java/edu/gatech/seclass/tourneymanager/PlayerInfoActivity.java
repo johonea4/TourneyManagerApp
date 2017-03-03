@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.EditText;
+
+import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.models.Player;
 
 public class PlayerInfoActivity extends Activity {
 
@@ -53,6 +57,10 @@ public class PlayerInfoActivity extends Activity {
         {
             addPlayer.setVisibility(Button.INVISIBLE);
         }
+
+        Spinner deckSpinner = (Spinner) findViewById(R.id.deckChoiceSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deckChoice_array, android.R.layout.simple_spinner_item);
+        deckSpinner.setAdapter(adapter);
     }
 
     //TODO: Populate Deck Choice Spinner
@@ -61,7 +69,43 @@ public class PlayerInfoActivity extends Activity {
     public void onCreatePlayer(View view)
     {
         //TODO: Handle adding the player and checking for errors
-        finish();
+
+        boolean valid = validateInputs();
+
+        if(valid){
+            Player player = new Player();
+            player.setName(name.getText().toString());
+            player.setUserName(username.getText().toString());
+            player.setPhoneNumber(Integer.parseInt(phone.getText().toString()));
+            player.setDeckChoice(deckChoice.getSelectedItem().toString());
+
+            try {
+                TourneyManagerDao.savePlayer(player); //db call
+                finish();
+            } catch (Exception e) {
+                //TODO - Error popup
+            }
+        }
+    }
+
+    private boolean validateInputs()
+    {
+        boolean valid = true;
+        if(name.getText().toString() == null || name.getText().toString().isEmpty()){
+            name.setError("Invalid Name");
+            valid = false;
+        }
+        if(username.getText().toString() == null || name.getText().toString().isEmpty()){
+            username.setError("Invalid User Name");
+            valid = false;
+        }
+        try {
+            Integer.parseInt(phone.getText().toString());
+        } catch (NumberFormatException e) {
+            phone.setError("Invalid Phone Number");
+            valid = false;
+        }
+        return valid;
     }
 
     private TourneyManagerApp m_app;

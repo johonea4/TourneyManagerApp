@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,8 +20,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+//import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.models.Round;
+import edu.gatech.seclass.tourneymanager.models.Tournament;
+import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
 class Recalculator implements TextWatcher
 {
@@ -81,6 +86,7 @@ public class CreateTourneyActivity extends Activity {
     {
         super.onStart();
         m_mode = m_app.getappMode();
+        tournament = new Tournament();
         Intent i = getIntent();
         if(i.getBooleanExtra("ManagerCreate",false))
         {
@@ -105,11 +111,17 @@ public class CreateTourneyActivity extends Activity {
 
     public void recalculate()
     {
-        int errors = 0;
+        errors = 0;
+        String tournamentId = tourneyID.getText().toString();
         String feeString = playerFee.getText().toString();
         String percentString = housePercent.getText().toString();
         int feeVal=0, countVal=0, percentVal=0;
-        if(feeString==null || feeString.length()<=0 || (feeVal = Integer.parseInt(feeString))<=0)
+        if(tournamentId == null || tournamentId.isEmpty())
+        {
+            tourneyID.setError("Invalid Tournament Id”");
+            errors++;
+        }
+        if(feeString==null || feeString.isEmpty() || (feeVal = Integer.parseInt(feeString))<=0)
         {
             playerFee.setError("Invalid Fee”");
             errors++;
@@ -119,7 +131,7 @@ public class CreateTourneyActivity extends Activity {
         {
             errors++;
         }
-        if(percentString==null || percentString.length()<=0 || (percentVal=Integer.parseInt(percentString))<0 || (percentVal)>100)
+        if(percentString==null || percentString.isEmpty() || (percentVal=Integer.parseInt(percentString))<0 || (percentVal)>100)
         {
             housePercent.setError("Invalid House Percentage");
             errors++;
@@ -134,12 +146,12 @@ public class CreateTourneyActivity extends Activity {
         }
 
         int potVal = countVal*feeVal;
-        int cutValue = (int)((double)potVal * ((double)(percentVal)/100.0));
-        int fVal = (int)((double)(potVal-cutValue)*0.5);
-        int sVal = (int)((double)(potVal-cutValue)*0.3);
-        int tVal = (int)((double)(potVal-cutValue)*0.2);
+        cutVal = (int)((double)potVal * ((double)(percentVal)/100.0));
+        fVal = (int)((double)(potVal-cutVal)*0.5);
+        sVal = (int)((double)(potVal-cutVal)*0.3);
+        tVal = (int)((double)(potVal-cutVal)*0.2);
 
-        houseCut.setText(String.valueOf(cutValue));
+        houseCut.setText(String.valueOf(cutVal));
         firstPlace.setText(String.valueOf(fVal));
         secondPlace.setText(String.valueOf(sVal));
         thirdPlace.setText(String.valueOf(tVal));
@@ -167,7 +179,21 @@ public class CreateTourneyActivity extends Activity {
             return;
         }
         m_app.setTourneyRunning(true);
-        finish();
+        recalculate(); //Recheck. not necessarily required
+
+        if(errors==0)
+        {
+            createTournament();
+            createRounds();
+
+            try {
+                //TourneyManagerDao.saveTournament(tournament);
+                //TourneyManagerDao.saveRounds(rounds);
+            } catch (Exception e) {
+                //TODO - throw an error popup
+            }
+            finish();
+        }
     }
 
     public void doAddPlayer(String name)
@@ -221,6 +247,37 @@ public class CreateTourneyActivity extends Activity {
         }
     }
 
+    private void createTournament() {
+
+        tournament.setId(Integer.parseInt(tourneyID.getText().toString()));
+        tournament.setRunning(true);
+
+        tourneyInfo = new TourneyInfo();
+        tourneyInfo.setHouseCut(cutVal);
+        tourneyInfo.setFirstPlacePrize(fVal);
+        tourneyInfo.setSecondPlacePrize(sVal);
+        tourneyInfo.setThirdPlacePrize(tVal);
+
+        tournament.setInfo(tourneyInfo);
+    }
+
+    private void createRounds(){
+
+        int listOfRounds = 4;
+        int matches = 8;
+
+        rounds = new ArrayList<Round>();
+
+        for(int i=0; i<listOfRounds; i++){
+            Round round = new Round();
+            round.setId(i+1);
+            //round.setTournamentId(Integer.parseInt(tourneyID.getText().toString()));
+            rounds.add(round);
+            round.createMatches(matches);
+            matches = matches / 2;
+        }
+    }
+
     //Private Members
     private TourneyManagerApp m_app;
     private AppMode m_mode;
@@ -239,4 +296,14 @@ public class CreateTourneyActivity extends Activity {
     ArrayAdapter<String> playersAdapter;
     ArrayList<String> players;
     String currentPlayer;
+
+    private Tournament tournament;
+    private TourneyInfo tourneyInfo;
+    private ArrayList<Round> rounds;
+
+    int errors;
+    int cutVal;
+    int fVal;
+    int sVal;
+    int tVal;
 }

@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.models.Player;
 
 public class ManagePlayersActivity extends Activity {
 
@@ -37,7 +43,15 @@ public class ManagePlayersActivity extends Activity {
     //TODO: Populate player list with stored players from Database
     public void populatePlayers()
     {
+        ArrayList<Player> players = TourneyManagerDao.GetPlayerNames();
+        ArrayList<String> playerNames = new ArrayList<String>();
 
+        for(Player p : players) {
+            playerNames.add(p.getUserName());
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames);
+        playerList.setAdapter(adapter);
     }
 
     private TourneyManagerApp m_app;
