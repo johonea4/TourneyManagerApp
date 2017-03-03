@@ -3,17 +3,24 @@ package edu.gatech.seclass.tourneymanager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 class Recalculator implements TextWatcher
 {
@@ -49,13 +56,24 @@ public class CreateTourneyActivity extends Activity {
         startButton = (Button)findViewById(R.id.tourneyStartButton);
         addPlayer = (Button)findViewById(R.id.addPlayerButton);
         removePlayer = (Button)findViewById(R.id.removePlayerButton);
-
+        currentPlayer = null;
 
         listener = new Recalculator(this);
 
         housePercent.addTextChangedListener(listener);
         playerFee.addTextChangedListener(listener);
 
+        players = new ArrayList();
+        playersAdapter = new ArrayAdapter<String>(CreateTourneyActivity.this,R.layout.list_create_tourney,players);
+        playerList.setAdapter(playersAdapter);
+
+        playerList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView item = (TextView)view;
+                currentPlayer = item.getText().toString().isEmpty() ? null : item.getText().toString();
+            }
+        });
     }
 
     @Override
@@ -129,20 +147,78 @@ public class CreateTourneyActivity extends Activity {
 
     public void onStartTournament(View view)
     {
+        String feeString = playerFee.getText().toString();
+        String percentString = housePercent.getText().toString();
+        int feeVal=0, countVal=0, percentVal=0;
+        if(feeString==null || feeString.length()<=0 || (feeVal = Integer.parseInt(feeString))<=0)
+        {
+            Toast.makeText(CreateTourneyActivity.this,"Invalid Fee Value",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        countVal = playerList.getCount();
+        if((countVal)<3)
+        {
+            Toast.makeText(CreateTourneyActivity.this,"Need at least 3 players",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(percentString==null || percentString.length()<=0 || (percentVal=Integer.parseInt(percentString))<0 || (percentVal)>100)
+        {
+            Toast.makeText(CreateTourneyActivity.this,"House Percentage Invalid",Toast.LENGTH_SHORT).show();
+            return;
+        }
         m_app.setTourneyRunning(true);
         finish();
+    }
+
+    public void doAddPlayer(String name)
+    {
+        players.add(name);
+        playersAdapter.notifyDataSetChanged();
+        recalculate();
     }
 
     //TODO: Launch dialog with text field to enter players username
     public void onAddPlayer(View view)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateTourneyActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(CreateTourneyActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_user_name,null);
+        final EditText mName = (EditText)mView.findViewById(R.id.nameField);
+        Button ok = (Button)mView.findViewById(R.id.buttonOK);
+        Button cancel = (Button)mView.findViewById(R.id.buttonCancel);
+        builder.setView(mView);
+        final AlertDialog dialog = builder.create();
+        //TODO: Set On Click Listeners
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mName.getText().toString().isEmpty()) {
+                    doAddPlayer(mName.getText().toString());
+                    dialog.hide();
+                }
+                else
+                {
+                    Toast.makeText(CreateTourneyActivity.this,"Please Enter User Name",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                dialog.hide();
+            }
+        });
+        dialog.show();
 
     }
     //TODO: Remove player from list that is currently selected
     public void onRemovePlayer(View view)
     {
-
+        if(currentPlayer != null)
+        {
+            players.remove(currentPlayer);
+            playersAdapter.notifyDataSetChanged();
+            recalculate();
+        }
     }
 
     //Private Members
@@ -160,4 +236,7 @@ public class CreateTourneyActivity extends Activity {
     private Button addPlayer;
     private Button removePlayer;
     private TextWatcher listener;
+    ArrayAdapter<String> playersAdapter;
+    ArrayList<String> players;
+    String currentPlayer;
 }
