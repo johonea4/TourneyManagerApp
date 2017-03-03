@@ -18,7 +18,7 @@
         android:layout_alignParentStart="true"
         android:id="@+id/createPlayerButton"
         android:layout_alignParentEnd="true"
-        android:onClick="onCreatePlayer (ManagePlayersActivity)" />
+        android:onClick="onCreatePlayer" />
 
     <ListView
         android:layout_width="match_parent"

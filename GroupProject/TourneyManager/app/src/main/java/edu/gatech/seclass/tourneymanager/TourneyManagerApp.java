@@ -14,11 +14,14 @@ public class TourneyManagerApp extends Application
     @Override
     public void onCreate()
     {
+        super.onCreate();
         appMode=null;
         tourneyRunning=false;
-        SharedPreferences pref = getSharedPreferences("TourneyManagerPref", Context.MODE_PRIVATE);
+        pref = getSharedPreferences("TourneyManagerPref", Context.MODE_PRIVATE);
+        edit = pref.edit();
         tourneyRunning = pref.getBoolean("tourneyRunning",tourneyRunning);
-        pref.edit().putBoolean("tourneyRunning",tourneyRunning);
+        edit.putBoolean("tourneyRunning",tourneyRunning);
+        edit.commit();
         prefChanged=false;
     }
     public void setAppMode(AppMode m) { appMode = m; }
@@ -29,7 +32,6 @@ public class TourneyManagerApp extends Application
         {
             prefChanged=false;
             tourneyRunning = false;
-            SharedPreferences pref = getSharedPreferences("TourneyManagerPref", Context.MODE_PRIVATE);
             tourneyRunning = pref.getBoolean("tourneyRunning", tourneyRunning);
         }
         return tourneyRunning;
@@ -37,8 +39,8 @@ public class TourneyManagerApp extends Application
     public void setTourneyRunning(boolean r)
     {
         tourneyRunning=r;
-        SharedPreferences pref = getSharedPreferences("TourneyManagerPref", Context.MODE_PRIVATE);
-        pref.edit().putBoolean("tourneyRunning",tourneyRunning);
+        edit.putBoolean("tourneyRunning",tourneyRunning);
+        edit.commit();
         prefChanged = true;
     }
 
@@ -46,4 +48,6 @@ public class TourneyManagerApp extends Application
     private AppMode appMode;
     private boolean tourneyRunning;
     private boolean prefChanged;
+    private SharedPreferences pref;
+    private  SharedPreferences.Editor edit;
 }
