@@ -8,6 +8,6 @@ public class PlayerMode extends AppMode
 {
     PlayerMode()
     {
-        super(mode_t.MANAGER);
+        super(mode_t.PLAYER);
     }
 }
