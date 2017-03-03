@@ -46,10 +46,10 @@ public class ManagePlayersActivity extends Activity {
     {
         //ArrayList<Player> players = TourneyManagerDao.GetPlayerNames();
         PlayerDBHelper playerDBHelper = new PlayerDBHelper(this);
-        List<edu.gatech.seclass.tourneymanager.db.Player> players = playerDBHelper.getAllPlayers();
+        List<edu.gatech.seclass.tourneymanager.models.Player> players = playerDBHelper.getAllPlayers();
         ArrayList<String> playerNames = new ArrayList<String>();
 
-        for(edu.gatech.seclass.tourneymanager.db.Player p : players) {
+        for(edu.gatech.seclass.tourneymanager.models.Player p : players) {
             playerNames.add(p.getUserName());
         }
 

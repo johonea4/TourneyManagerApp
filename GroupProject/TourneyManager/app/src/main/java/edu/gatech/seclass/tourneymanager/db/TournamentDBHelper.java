@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.gatech.seclass.tourneymanager.models.Tournament;
+
 /**
  * Created by rugrani on 3/2/17.
  */

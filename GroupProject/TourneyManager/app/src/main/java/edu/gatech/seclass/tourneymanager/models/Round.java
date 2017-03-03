@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Round
 {
-    private int Id;
+    private int id;
     //private int tournamentId;
     private ArrayList<String> winners;
     private ArrayList<Match> matches;
@@ -18,12 +18,12 @@ public class Round
 
     public void setId(int Id)
     {
-        this.Id = Id;
+        this.id = Id;
     }
 
     public int getId()
     {
-        return Id;
+        return id;
     }
 
 //    public int getTournamentId() {
@@ -55,7 +55,7 @@ public class Round
         this.running = running;
     }
 
-    public boolean getRunning()
+    public boolean isRunning()
     {
         return running;
     }
@@ -65,7 +65,7 @@ public class Round
         this.finished = finished;
     }
 
-    public boolean getFinished()
+    public boolean isFinished()
     {
         return finished;
     }

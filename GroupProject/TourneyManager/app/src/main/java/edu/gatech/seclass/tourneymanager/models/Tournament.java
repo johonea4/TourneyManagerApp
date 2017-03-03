@@ -2,15 +2,13 @@ package edu.gatech.seclass.tourneymanager.models;
 
 import java.util.List;
 
-import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
-
 /**
  * Created by IndikaP on 3/2/17.
  */
 
 public class Tournament
 {
-    private int Id;
+    private int id;
     private boolean running;
     private boolean finished;
     private TourneyInfo info;
@@ -18,14 +16,23 @@ public class Tournament
     private List<Round> rounds;
 
 
+    public Tournament() {
+    }
+
+    public Tournament(int id, boolean running, boolean endedEarly) {
+        this.id = id;
+        this.running = running;
+        this.endedEarly = endedEarly;
+    }
+
     public void setId(int Id)
     {
-        this.Id = Id;
+        this.id = Id;
     }
 
     public int getId()
     {
-        return Id;
+        return id;
     }
 
     public void setInfo(TourneyInfo info)
@@ -38,17 +45,17 @@ public class Tournament
         return info;
     }
 
-    private void setEndedEarly(boolean endedEarly)
+    public void setEndedEarly(boolean endedEarly)
     {
         this.endedEarly = endedEarly;
     }
 
-    public boolean getEndedEarly()
+    public boolean isEndedEarly()
     {
         return endedEarly;
     }
 
-    private void setRounds(List<Round> rounds)
+    public void setRounds(List<Round> rounds)
     {
         this.rounds = rounds;
     }
@@ -63,7 +70,7 @@ public class Tournament
         this.running = running;
     }
 
-    public boolean getRunning()
+    public boolean isRunning()
     {
         return running;
     }
@@ -73,7 +80,7 @@ public class Tournament
         this.finished = finished;
     }
 
-    public boolean getFinished()
+    public boolean isFinished()
     {
         return finished;
     }

@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.gatech.seclass.tourneymanager.models.Player;
+
 /**
  * Created by rugrani on 3/2/17.
  */
@@ -34,7 +36,7 @@ public class PlayerDBHelper extends AbstractHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_USER_NAME + " TEXT PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
-                + KEY_PH_NO + " TEXT,"
+                + KEY_PH_NO + " INTEGER,"
                 + KEY_DECK_CHOICE + " TEXT"
                 + ")";
         db.execSQL(CREATE_PLAYER_TABLE);
@@ -75,7 +77,7 @@ public class PlayerDBHelper extends AbstractHelper {
             cursor.moveToFirst();
 
         Player player = new Player(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+                cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4));
         return player;
     }
 
@@ -94,7 +96,7 @@ public class PlayerDBHelper extends AbstractHelper {
                 player.setId(Integer.parseInt(cursor.getString(0)));
                 player.setName(cursor.getString(1));
                 player.setUserName(cursor.getString(2));
-                player.setPhoneNumber(cursor.getString(3));
+                player.setPhoneNumber(cursor.getInt(3));
                 player.setDeckChoice(cursor.getString(4));
                 // Adding player to list
                 playerList.add(player);

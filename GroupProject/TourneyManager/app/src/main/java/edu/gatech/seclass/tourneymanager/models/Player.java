@@ -8,12 +8,35 @@ import java.util.List;
 
 public class Player
 {
+    private int id;
     private String name;
     private String userName;
     private int phoneNumber;
     private String deckChoice;
     private List<Prize> prizes;
     private int matchesWon;
+
+    public Player() {
+    }
+
+    public Player(int id, String name, String userName, int phoneNumber, String deckChoice) {
+        this.id = id;
+        this.name = name;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.deckChoice = deckChoice;
+    }
+
+    public Player(String name, String userName, int phoneNumber, String deckChoice) {
+        this.name = name;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
+        this.deckChoice = deckChoice;
+    }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public int GetPlayerTotals()
     {

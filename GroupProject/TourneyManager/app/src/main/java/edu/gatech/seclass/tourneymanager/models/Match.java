@@ -1,14 +1,12 @@
 package edu.gatech.seclass.tourneymanager.models;
 
-import java.util.List;
-
 /**
  * Created by IndikaP on 2/28/17.
  */
 
 public class Match
 {
-    private int Id;
+    private int id;
 //    private int roundId;
 //    private int tournamentId;
     private String winner;
@@ -19,12 +17,12 @@ public class Match
 
     public void setId(int Id)
     {
-        this.Id = Id;
+        this.id = Id;
     }
 
     public int getId()
     {
-        return Id;
+        return id;
     }
 
 //    public int getRoundId() {
@@ -78,7 +76,7 @@ public class Match
         this.running = running;
     }
 
-    public boolean getRunning()
+    public boolean isRunning()
     {
         return running;
     }
@@ -88,7 +86,7 @@ public class Match
         this.finished = finished;
     }
 
-    public boolean getFinished()
+    public boolean isFinished()
     {
         return finished;
     }
