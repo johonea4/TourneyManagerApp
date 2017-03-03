@@ -91,10 +91,11 @@
             android:id="@+id/prizeList" />
 
         <Button
-            android:text="Create Player"
+            android:id="@+id/addNewPlayerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/addNewPlayerButton" />
+            android:onClick="onCreatePlayer"
+            android:text="Create Player" />
 
     </LinearLayout>
 </RelativeLayout>

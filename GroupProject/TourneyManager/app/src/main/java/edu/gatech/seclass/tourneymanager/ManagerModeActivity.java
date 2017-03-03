@@ -58,6 +58,11 @@ public class ManagerModeActivity extends Activity
         if(m_app.isTourneyRunning())
         {
             m_app.setTourneyRunning(false);
+
+            //method to find if the tournament ended early. Not all the rounds are completed.
+            //method to check if all the rounds are being completed. call refund not.
+            //update the tournament/ matches
+
             setButtons();
         }
         else
