@@ -81,8 +81,8 @@ public class PlayerDBHelper extends AbstractHelper {
         return player;
     }
 
-    public List<Player> getAllPlayers() {
-        List<Player> playerList = new ArrayList<>();
+    public ArrayList<Player> getAllPlayers() {
+        ArrayList<Player> playerList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_PLAYER;
 

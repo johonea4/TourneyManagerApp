@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Player;
@@ -71,21 +72,19 @@ public class PlayerInfoActivity extends Activity {
         //TODO: Handle adding the player and checking for errors
 
         boolean valid = validateInputs();
+        String nameStr = name.getText().toString();
+        String usernameStr = username.getText().toString();
+        int phoneNumber = Integer.parseInt(phone.getText().toString());
+        String deckChoiceStr = deckChoice.getSelectedItem().toString();
 
         if(valid){
-            Player player = new Player();
-            player.setName(name.getText().toString());
-            player.setUserName(username.getText().toString());
-            player.setPhoneNumber(Integer.parseInt(phone.getText().toString()));
-            player.setDeckChoice(deckChoice.getSelectedItem().toString());
-
-            try {
-                TourneyManagerDao.savePlayer(player); //db call
-                finish();
-            } catch (Exception e) {
-                //TODO - Error popup
+            if(!((ManagerMode)m_mode).createPlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr)){
+                Toast.makeText(PlayerInfoActivity.this,"Unable to create player",Toast.LENGTH_SHORT).show();
+                return;
             }
         }
+
+        finish();
     }
 
     private boolean validateInputs()

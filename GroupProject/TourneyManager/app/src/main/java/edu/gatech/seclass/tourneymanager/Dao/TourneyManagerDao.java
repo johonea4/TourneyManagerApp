@@ -2,7 +2,9 @@ package edu.gatech.seclass.tourneymanager.Dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Context;
 
+import edu.gatech.seclass.tourneymanager.db.PlayerDBHelper;
 import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
 import edu.gatech.seclass.tourneymanager.models.Round;
@@ -12,11 +14,11 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
  * Created by IndikaP on 3/2/17.
  */
 
-public class TourneyManagerDao
-{
-    public static ArrayList<Player> players = new ArrayList<Player>();
-    public static ArrayList<Player> GetPlayerNames() {
-        //TODO
+    public class TourneyManagerDao
+    {
+        public static ArrayList<Player> players = new ArrayList<Player>();
+        public static ArrayList<String> GetPlayerNames(Context context) {
+            //TODO
 
         Player p1 = new Player();
         p1.setUserName("kodagi1");
@@ -39,8 +41,15 @@ public class TourneyManagerDao
         p3.setDeckChoice("T");
         players.add(p3);
 
-        return players;
+//        PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+//        ArrayList<Player> players = playerDBHelper.getAllPlayers();
+        ArrayList<String> playerNames = new ArrayList<String>();
 
+        for(Player p : players) {
+            playerNames.add(p.getUserName());
+        }
+
+        return playerNames;
     }
 
     public List<Tournament> GetTournaments() {

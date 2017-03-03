@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 //import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
 import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
@@ -183,15 +184,13 @@ public class CreateTourneyActivity extends Activity {
 
         if(errors==0)
         {
-            createTournament();
-            createRounds();
-
-            try {
-                //TourneyManagerDao.saveTournament(tournament);
-                //TourneyManagerDao.saveRounds(rounds);
-            } catch (Exception e) {
-                //TODO - throw an error popup
+            int tourneyId = Integer.parseInt(tourneyID.getText().toString());
+            //createTournament();
+            if(!((ManagerMode)m_mode).createTournament(players, tourneyId, cutVal, fVal, sVal, tVal)){
+                Toast.makeText(CreateTourneyActivity.this,"Tournament was unable to be created",Toast.LENGTH_SHORT).show();
+                return;
             }
+
             finish();
         }
     }
@@ -259,23 +258,6 @@ public class CreateTourneyActivity extends Activity {
         tourneyInfo.setThirdPlacePrize(tVal);
 
         tournament.setInfo(tourneyInfo);
-    }
-
-    private void createRounds(){
-
-        int listOfRounds = 4;
-        int matches = 8;
-
-        rounds = new ArrayList<Round>();
-
-        for(int i=0; i<listOfRounds; i++){
-            Round round = new Round();
-            round.setId(i+1);
-            //round.setTournamentId(Integer.parseInt(tourneyID.getText().toString()));
-            rounds.add(round);
-            round.createMatches(matches);
-            matches = matches / 2;
-        }
     }
 
     //Private Members
