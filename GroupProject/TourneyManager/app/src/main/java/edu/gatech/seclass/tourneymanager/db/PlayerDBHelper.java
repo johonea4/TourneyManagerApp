@@ -14,7 +14,6 @@ import java.util.List;
  * Created by rugrani on 3/2/17.
  */
 
-/*
 public class PlayerDBHelper extends AbstractHelper {
 
     private static final String TABLE_PLAYER = "player";
@@ -112,4 +111,3 @@ public class PlayerDBHelper extends AbstractHelper {
         db.close();
     }
 }
-*/

@@ -9,8 +9,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.db.PlayerDBHelper;
 import edu.gatech.seclass.tourneymanager.models.Player;
 
 public class ManagePlayersActivity extends Activity {
@@ -43,10 +44,12 @@ public class ManagePlayersActivity extends Activity {
     //TODO: Populate player list with stored players from Database
     public void populatePlayers()
     {
-        ArrayList<Player> players = TourneyManagerDao.GetPlayerNames();
+        //ArrayList<Player> players = TourneyManagerDao.GetPlayerNames();
+        PlayerDBHelper playerDBHelper = new PlayerDBHelper(this);
+        List<edu.gatech.seclass.tourneymanager.db.Player> players = playerDBHelper.getAllPlayers();
         ArrayList<String> playerNames = new ArrayList<String>();
 
-        for(Player p : players) {
+        for(edu.gatech.seclass.tourneymanager.db.Player p : players) {
             playerNames.add(p.getUserName());
         }
 
