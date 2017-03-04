@@ -113,7 +113,7 @@ public class TournamentDBHelper extends AbstractHelper {
         return tournamentList;
     }
 
-    public void deletePlayer(Tournament tournament) {
+    public void deleteTournament(Tournament tournament) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TOURNAMENT, KEY_ID + " = ?",
                 new String[] { String.valueOf(tournament.getId()) });

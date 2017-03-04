@@ -25,6 +25,7 @@ public class ModeSelectActivity extends Activity
         a.setAppMode(manager);
         Intent launchManager = new Intent(ModeSelectActivity.this,ManagerModeActivity.class);
         startActivity(launchManager);
+
     }
 
     public void startPlayerMode(View view)

@@ -15,6 +15,18 @@ public class Match
     private boolean running;
     private boolean finished;
 
+    public Match() {
+    }
+
+    public Match(int id, String winner, String player1, String player2, boolean running, boolean finished) {
+        this.id = id;
+        this.winner = winner;
+        this.player1 = player1;
+        this.player2 = player2;
+        this.running = running;
+        this.finished = finished;
+    }
+
     public void setId(int Id)
     {
         this.id = Id;
@@ -51,7 +63,7 @@ public class Match
         return winner;
     }
 
-    private void setPlayer1(String player)
+    public void setPlayer1(String player)
     {
         this.player1 = player;
     }
@@ -61,7 +73,7 @@ public class Match
         return player1;
     }
 
-    private void setPlayer2(String player)
+    public void setPlayer2(String player)
     {
         this.player2 = player2;
     }
