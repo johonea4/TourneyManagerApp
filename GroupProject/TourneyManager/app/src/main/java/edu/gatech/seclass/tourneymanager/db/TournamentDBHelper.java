@@ -27,8 +27,7 @@ public class TournamentDBHelper extends AbstractHelper {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void OnCreate(SQLiteDatabase db) {
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_TOURNAMENT + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_IS_RUNNING + " INT,"
@@ -107,7 +106,7 @@ public class TournamentDBHelper extends AbstractHelper {
     public List<Tournament> getAllTournament() {
         List<Tournament> tournamentList = new ArrayList<>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_TOURNAMENT;
+        String selectQuery = "SELECT * FROM " + TABLE_TOURNAMENT;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

@@ -40,10 +40,10 @@ public class ManagerMode extends AppMode
         } catch (Exception e) {
             return false;
         }
-        return createRounds(context);
+        return createRounds(context,tourneyId);
     }
 
-    private boolean createRounds(Context context){
+    private boolean createRounds(Context context, int tId){
 
         int listOfRounds = 4;
         int matches = 8;
@@ -51,11 +51,11 @@ public class ManagerMode extends AppMode
         ArrayList<Round> rounds = new ArrayList<Round>();
 
         for(int i=0; i<listOfRounds; i++){
-            Round round = new Round();
+            Round round = new Round(tId);
             round.setId(i+1);
             //round.setTournamentId(Integer.parseInt(tourneyID.getText().toString()));
             rounds.add(round);
-            round.createMatches(matches);
+            round.createMatches(matches,round.getId());
             matches = matches / 2;
         }
 

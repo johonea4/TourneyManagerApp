@@ -31,8 +31,7 @@ public class PlayerDBHelper extends AbstractHelper {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void OnCreate(SQLiteDatabase db) {
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
                 + KEY_ID + " INTEGER,"
                 + KEY_USER_NAME + " TEXT PRIMARY KEY,"

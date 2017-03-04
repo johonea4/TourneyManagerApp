@@ -20,4 +20,11 @@ public abstract class AbstractHelper extends SQLiteOpenHelper{
     public AbstractHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        PlayerDBHelper.OnCreate(db);
+        MatchDBHelper.OnCreate(db);
+        TournamentDBHelper.OnCreate(db);
+    }
 }

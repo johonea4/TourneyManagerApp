@@ -10,11 +10,13 @@ import java.util.List;
 public class Round
 {
     private int id;
-    //private int tournamentId;
+    private int tournamentId;
     private ArrayList<String> winners;
     private ArrayList<Match> matches;
     private boolean running;
     private boolean finished;
+
+    public Round(int tId) { tournamentId=tId; }
 
     public void setId(int Id)
     {
@@ -26,13 +28,13 @@ public class Round
         return id;
     }
 
-//    public int getTournamentId() {
-//        return tournamentId;
-//    }
-//
-//    public void setTournamentId(int tournamentId) {
-//        this.tournamentId = tournamentId;
-//    }
+    public int getTournamentId() {
+        return tournamentId;
+    }
+
+    public void setTournamentId(int tournamentId) {
+        this.tournamentId = tournamentId;
+    }
 
     public void setWinners(ArrayList<String> winners) {
         this.winners = winners;
@@ -70,15 +72,15 @@ public class Round
         return finished;
     }
 
-    public void createMatches(int matchCount) {
+    public void createMatches(int matchCount, int Id) {
 
         matches = new ArrayList<Match>();
         for(int i=0; i<matchCount; i++)
         {
             Match match = new Match();
             match.setId(i+1);
-            //match.setRoundId(Id);
-            //match.setTournamentId(tournamentId);
+            match.setRoundId(Id);
+            match.setTournamentId(tournamentId);
             matches.add(match);
         }
     }

@@ -1,9 +1,13 @@
 package edu.gatech.seclass.tourneymanager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +29,8 @@ public class RoundsListActivity extends Activity {
         m_mode = m_app.getappMode();
         roundsList = (ListView)findViewById(R.id.roundsList);
         rounds = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, rounds);
+        adapter = new ArrayAdapter<String>(RoundsListActivity.this, android.R.layout.simple_list_item_1, rounds);
+        setListCallback();
     }
 
     @Override
@@ -66,8 +71,25 @@ public class RoundsListActivity extends Activity {
                 rounds.add(s);
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
+    public void setListCallback()
+    {
+        roundsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView item = (TextView)view;
+                String s = item.getText().toString();
+                String num = s.substring(6,s.indexOf('-'));
+                int n = Integer.parseInt(num);
+
+                Intent i = new Intent(RoundsListActivity.this,RoundInfoActivity.class);
+                i.putExtra("roundID",n);
+                startActivity(i);
+            }
+        });
+    }
     //TODO: Populate Round List
     //TODO: When round is selected launch RoundInfoActivity
 

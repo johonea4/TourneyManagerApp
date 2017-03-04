@@ -31,8 +31,7 @@ public class MatchDBHelper extends AbstractHelper{
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void OnCreate(SQLiteDatabase db) {
         String CREATE_MATCH_TABLE = "CREATE TABLE " + TABLE_MATCH + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_ROUND_ID + " INTEGER,"
@@ -118,10 +117,10 @@ public class MatchDBHelper extends AbstractHelper{
                 cursor.getString(1),
                 cursor.getString(2),
                 cursor.getString(3),
-                booleanforint(Integer.parseInt(cursor.getString(4))),
-                booleanforint(Integer.parseInt(cursor.getString(5))),
-                Integer.parseInt(cursor.getString(6)),
-                Integer.parseInt(cursor.getString(7))
+                booleanforint(cursor.getInt(4)),
+                booleanforint(cursor.getInt(5)),
+                cursor.getInt(6),
+                cursor.getInt(7)
 
         );
         return match;
@@ -143,10 +142,10 @@ public class MatchDBHelper extends AbstractHelper{
                 match.setWinners(cursor.getString(1));
                 match.setPlayer1(cursor.getString(2));
                 match.setPlayer2(cursor.getString(3));
-                match.setRunning(booleanforint(Integer.parseInt(cursor.getString(4))));
-                match.setFinished(booleanforint(Integer.parseInt(cursor.getString(5))));
-                match.setRoundId(Integer.parseInt(cursor.getString(6)));
-                match.setTournamentId(Integer.parseInt(cursor.getString(7)));
+                match.setRunning(booleanforint(cursor.getInt(4)));
+                match.setFinished(booleanforint(cursor.getInt(5)));
+                match.setRoundId(cursor.getInt(6));
+                match.setTournamentId(cursor.getInt(7));
 
                 matchList.add(match);
             } while (cursor.moveToNext());
