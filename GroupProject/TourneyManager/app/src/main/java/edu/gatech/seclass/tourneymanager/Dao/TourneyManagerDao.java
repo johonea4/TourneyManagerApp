@@ -60,13 +60,13 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
             playerDBHelper.updatePlayer(p);
         }
 
-        public List<Tournament> GetAllTournaments(Context context)
+        public static List<Tournament> GetAllTournaments(Context context)
         {
             TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
             return tournamentDBHelper.getAllTournament();
         }
 
-        public Tournament GetActiveTournament(Context context) {
+        public static Tournament GetActiveTournament(Context context) {
             TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
             List<Tournament> tournaments = tournamentDBHelper.getAllTournament();
             Tournament activeTournament = null;

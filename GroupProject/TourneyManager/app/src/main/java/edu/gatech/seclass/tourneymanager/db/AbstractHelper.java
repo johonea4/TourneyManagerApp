@@ -1,6 +1,7 @@
 package edu.gatech.seclass.tourneymanager.db;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
