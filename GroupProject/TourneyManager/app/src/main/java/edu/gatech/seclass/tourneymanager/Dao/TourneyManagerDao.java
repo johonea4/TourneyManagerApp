@@ -12,6 +12,7 @@ import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
+import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
 /**
  * Created by IndikaP on 3/2/17.
@@ -19,7 +20,8 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
 
     public class TourneyManagerDao
     {
-        public static ArrayList<String> GetPlayerNames(Context context) {
+        public static ArrayList<String> GetPlayerNames(Context context)
+        {
             PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
             ArrayList<Player> players = playerDBHelper.getAllPlayers();
             ArrayList<String> playerNames = new ArrayList<String>();
@@ -31,7 +33,8 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             return playerNames;
         }
 
-        public static Player GetPlayerByUsername(String userName, Context context) {
+        public static Player GetPlayerByUsername(String userName, Context context)
+        {
             PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
             ArrayList<Player> players = playerDBHelper.getAllPlayers();
             Iterator<Player> it = players.iterator();
@@ -42,16 +45,6 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
                     return p;
                 }
             }
-            return null;
-        }
-
-        public List<Tournament> GetTournaments() {
-            //TODO
-            return null;
-        }
-
-        public Tournament GetActiveTournament() {
-            //TODO
             return null;
         }
 
@@ -67,22 +60,94 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             playerDBHelper.updatePlayer(p);
         }
 
-        public static void saveTournament(Tournament tourn, Context context)
+        public List<Tournament> GetAllTournaments(Context context)
         {
             TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
-            tournamentDBHelper.addTournament(tourn);
-            //TODO
+            return tournamentDBHelper.getAllTournament();
+        }
+
+        public Tournament GetActiveTournament(Context context) {
+            TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
+            List<Tournament> tournaments = tournamentDBHelper.getAllTournament();
+            Tournament activeTournament = null;
+
+            for(Tournament tournament : tournaments){
+                if(tournament.isRunning()){
+                    activeTournament = tournament;
+                }
+            }
+            return activeTournament;
+        }
+
+        public static void saveTournament(Tournament t, Context context)
+        {
+            TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
+            tournamentDBHelper.addTournament(t);
+        }
+
+        public static void updateTournament(Tournament t, Context context)
+        {
+            TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
+            tournamentDBHelper.updateTournament(t);
         }
 
         public static void saveRounds(List<Round> rounds, Context context)
         {
             MatchDBHelper matchDBHelper = new MatchDBHelper(context);
 
-            for(Round round:rounds) {
+            for(Round round :rounds) {
                 List<Match> matches = round.getMatches();
                 for(Match match: matches){
                     matchDBHelper.addMatch(match);
                 }
             }
         }
-}
+
+        public static List<Match> GetMatchesByTourneyId(int tourneyId, Context context)
+        {
+            MatchDBHelper matchDBHelper = new MatchDBHelper(context);
+            List<Match> matches = matchDBHelper.getAllMatches();
+            List<Match> matchesByTourneyId = new ArrayList<Match>();
+
+            for(Match match : matches){
+                if(tourneyId == match.getTournamentId()){
+                    matchesByTourneyId.add(match);
+                }
+            }
+            return matchesByTourneyId;
+        }
+
+        public static List<Match> GetMatchesByRoundId(int roundId, Context context)
+        {
+            MatchDBHelper matchDBHelper = new MatchDBHelper(context);
+            List<Match> matches = matchDBHelper.getAllMatches();
+            List<Match> matchesByRoundId = new ArrayList<Match>();
+
+            for(Match match : matches){
+                if(roundId == match.getRoundId()){
+                    matchesByRoundId.add(match);
+                }
+            }
+            return matchesByRoundId;
+        }
+
+        public static Match GetMatchById(int matchId, Context context)
+        {
+            MatchDBHelper matchDBHelper = new MatchDBHelper(context);
+            List<Match> matches = matchDBHelper.getAllMatches();
+            Match matchById = null;
+
+            for(Match match : matches){
+                if(matchId == match.getId()){
+                    matchById = match;
+                }
+            }
+            return matchById;
+        }
+
+        public static void UpdateMatch(Match m, Context context)
+        {
+            MatchDBHelper matchDBHelper = new MatchDBHelper(context);
+            matchDBHelper.updateMatch(m);
+        }
+    }
