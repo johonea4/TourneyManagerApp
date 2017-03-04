@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import android.content.Context;
 
+import edu.gatech.seclass.tourneymanager.db.MatchDBHelper;
 import edu.gatech.seclass.tourneymanager.db.PlayerDBHelper;
+import edu.gatech.seclass.tourneymanager.db.TournamentDBHelper;
 import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
 import edu.gatech.seclass.tourneymanager.models.Round;
@@ -17,87 +19,70 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
 
     public class TourneyManagerDao
     {
-        public static ArrayList<Player> players = new ArrayList<Player>();
         public static ArrayList<String> GetPlayerNames(Context context) {
-            //TODO
+            PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+            ArrayList<Player> players = playerDBHelper.getAllPlayers();
+            ArrayList<String> playerNames = new ArrayList<String>();
 
-        Player p1 = new Player();
-        p1.setUserName("kodagi1");
-        p1.setName("Indika Pa");
-        p1.setPhoneNumber(2023222333);
-        p1.setDeckChoice("Engineer");
-        players.add(p1);
+            for(Player p : players) {
+                playerNames.add(p.getUserName());
+            }
 
-        Player p2 = new Player();
-        p2.setUserName("2");
-        p2.setName("2");
-        p2.setPhoneNumber(2);
-        p2.setDeckChoice("T");
-        players.add(p2);
-
-        Player p3 = new Player();
-        p3.setUserName("3");
-        p3.setName("3");
-        p3.setPhoneNumber(3);
-        p3.setDeckChoice("T");
-        players.add(p3);
-
-//        PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
-//        ArrayList<Player> players = playerDBHelper.getAllPlayers();
-        ArrayList<String> playerNames = new ArrayList<String>();
-
-        for(Player p : players) {
-            playerNames.add(p.getUserName());
+            return playerNames;
         }
 
-        return playerNames;
-    }
-        public static Player GetPlayer(String userName)
-        {
-//        PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
-//        ArrayList<Player> players = playerDBHelper.getAllPlayers();
+        public static Player GetPlayerByUsername(String userName, Context context) {
+            PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+            ArrayList<Player> players = playerDBHelper.getAllPlayers();
             Iterator<Player> it = players.iterator();
-            while(it.hasNext())
-            {
+            while (it.hasNext()) {
                 Player p = it.next();
                 String uName = p.getUserName();
-                if(uName.compareTo(userName)==0)
-                {
+                if (uName.compareTo(userName) == 0) {
                     return p;
                 }
             }
             return null;
         }
-        public static boolean UpdatePlayer(Player p)
-        {
-            return true;
+
+        public List<Tournament> GetTournaments() {
+            //TODO
+            return null;
         }
 
-    public List<Tournament> GetTournaments() {
-        //TODO
-        return null;
-    }
+        public Tournament GetActiveTournament() {
+            //TODO
+            return null;
+        }
 
-    public Tournament GetActiveTournament() {
-        //TODO
-        return null;
-    }
+        public static void savePlayer(Player player, Context context)
+        {
+            PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+            playerDBHelper.addPlayer(player);
+        }
 
-    public static void savePlayer(Player player)
-    {
-        players.add(player);
-    }
+        public static void UpdatePlayer(Player p, Context context)
+        {
+            PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+            playerDBHelper.updatePlayer(p);
+        }
 
-    public static void saveTournament(Tournament tourn)
-    {
-        //TODO
-    }
-
-    public static void saveRounds(List<Round> rounds)
-    {
-        for (Round round:rounds) {
-            List<Match> matches = round.getMatches();
+        public static void saveTournament(Tournament tourn, Context context)
+        {
+            TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
+            tournamentDBHelper.addTournament(tourn);
             //TODO
         }
-    }
+
+        public static void saveRounds(List<Round> rounds, Context context)
+        {
+            MatchDBHelper matchDBHelper = new MatchDBHelper(context);
+
+            for(Round round:rounds) {
+                List<Match> matches = round.getMatches();
+                for(Match match: matches){
+                    matchDBHelper.addMatch(match);
+                }
+            }
+        }
 }

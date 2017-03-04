@@ -1,5 +1,7 @@
 package edu.gatech.seclass.tourneymanager;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
@@ -19,7 +21,7 @@ public class ManagerMode extends AppMode
         super(mode_t.MANAGER);
     }
 
-    public boolean createTournament(ArrayList<String> players, int tourneyId, int cutVal, int fVal, int sVal, int tVal) {
+    public boolean createTournament(ArrayList<String> players, int tourneyId, int cutVal, int fVal, int sVal, int tVal, Context context) {
 
         Tournament tournament = new Tournament();
         tournament.setId(tourneyId);
@@ -34,14 +36,14 @@ public class ManagerMode extends AppMode
         tournament.setInfo(tourneyInfo);
 
         try {
-            TourneyManagerDao.saveTournament(tournament);
+            TourneyManagerDao.saveTournament(tournament, context);
         } catch (Exception e) {
             return false;
         }
-        return createRounds();
+        return createRounds(context);
     }
 
-    private boolean createRounds(){
+    private boolean createRounds(Context context){
 
         int listOfRounds = 4;
         int matches = 8;
@@ -58,7 +60,7 @@ public class ManagerMode extends AppMode
         }
 
         try {
-            TourneyManagerDao.saveRounds(rounds);
+            TourneyManagerDao.saveRounds(rounds, context);
         } catch (Exception e) {
             return false;
         }
@@ -66,7 +68,7 @@ public class ManagerMode extends AppMode
         return true;
     }
 
-    public boolean createPlayer(String name, String username, int phone, String deckChoice) {
+    public boolean createPlayer(String name, String username, int phone, String deckChoice, Context context) {
         Player player = new Player();
         player.setName(name);
         player.setUserName(username);
@@ -74,15 +76,15 @@ public class ManagerMode extends AppMode
         player.setDeckChoice(deckChoice);
 
         try {
-            TourneyManagerDao.savePlayer(player); //db call
+            TourneyManagerDao.savePlayer(player, context); //db call
         } catch (Exception e) {
             return false;
         }
 
         return true;
     }
-    public boolean updatePlayer(String name, String username, int phone, String deckChoice) {
-        Player player = TourneyManagerDao.GetPlayer(username);
+    public boolean updatePlayer(String name, String username, int phone, String deckChoice, Context context) {
+        Player player = TourneyManagerDao.GetPlayerByUsername(username, context);
         if(player==null) return false;
         player.setName(name);
         player.setUserName(username);
@@ -90,7 +92,7 @@ public class ManagerMode extends AppMode
         player.setDeckChoice(deckChoice);
 
         try {
-            TourneyManagerDao.savePlayer(player); //db call
+            TourneyManagerDao.UpdatePlayer(player, context); //db call
         } catch (Exception e) {
             return false;
         }

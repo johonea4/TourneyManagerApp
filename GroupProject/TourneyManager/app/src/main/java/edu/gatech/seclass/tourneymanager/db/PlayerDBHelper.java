@@ -85,7 +85,7 @@ public class PlayerDBHelper extends AbstractHelper {
     // Getting single player
     public Player updatePlayer(Player player) {
         Log.d("UPDATE_PLAYER", "updatePlayer: start");
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_USER_NAME,player.getUserName());

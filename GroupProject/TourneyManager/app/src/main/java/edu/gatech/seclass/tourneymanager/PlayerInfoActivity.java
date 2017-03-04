@@ -54,7 +54,7 @@ public class PlayerInfoActivity extends Activity {
             prizeList.setVisibility(ListView.VISIBLE);
             addPlayer.setVisibility(Button.VISIBLE);
             String p = getIntent().getStringExtra("playerUserName");
-            Player po = TourneyManagerDao.GetPlayer(p);
+            Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
             if(po!=null)
             {
                 name.setText(po.getName());
@@ -70,7 +70,7 @@ public class PlayerInfoActivity extends Activity {
         {
             addPlayer.setVisibility(Button.INVISIBLE);
             String p = getIntent().getStringExtra("playerUserName");
-            Player po = TourneyManagerDao.GetPlayer(p);
+            Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
             if(po!=null)
             {
                 name.setText(po.getName());
@@ -99,15 +99,15 @@ public class PlayerInfoActivity extends Activity {
 
         if(valid){
             Intent intent = getIntent();
-            if(!intent.getBooleanExtra("doPlayerAdd",false)) {
-                if (!((ManagerMode) m_mode).createPlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr)) {
+            if(intent.getBooleanExtra("doPlayerAdd",false)) {
+                if (!((ManagerMode) m_mode).createPlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr, PlayerInfoActivity.this)) {
                     Toast.makeText(PlayerInfoActivity.this, "Unable to create player", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
             else
             {
-                if(!((ManagerMode)m_mode).updatePlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr))
+                if(!((ManagerMode)m_mode).updatePlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr, PlayerInfoActivity.this))
                 {
                     Toast.makeText(PlayerInfoActivity.this, "Unable to update player", Toast.LENGTH_SHORT).show();
                     return;

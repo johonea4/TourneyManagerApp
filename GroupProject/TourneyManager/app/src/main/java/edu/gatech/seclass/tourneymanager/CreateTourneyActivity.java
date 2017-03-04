@@ -185,7 +185,7 @@ public class CreateTourneyActivity extends Activity {
         {
             int tourneyId = Integer.parseInt(tourneyID.getText().toString());
             //createTournament();
-            if(!((ManagerMode)m_mode).createTournament(players, tourneyId, cutVal, fVal, sVal, tVal)){
+            if(!((ManagerMode)m_mode).createTournament(players, tourneyId, cutVal, fVal, sVal, tVal, CreateTourneyActivity.this)){
                 Toast.makeText(CreateTourneyActivity.this,"Tournament was unable to be created",Toast.LENGTH_SHORT).show();
                 return;
             }
