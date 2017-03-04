@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,8 @@ public class PlayerDBHelper extends AbstractHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_USER_NAME + " TEXT,"
+                + KEY_ID + " INTEGER,"
+                + KEY_USER_NAME + " TEXT PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PH_NO + " INTEGER,"
                 + KEY_DECK_CHOICE + " TEXT"
@@ -78,6 +79,22 @@ public class PlayerDBHelper extends AbstractHelper {
 
         Player player = new Player(Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4));
+        return player;
+    }
+
+    // Getting single player
+    public Player updatePlayer(Player player) {
+        Log.d("UPDATE_PLAYER", "updatePlayer: start");
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_NAME,player.getUserName());
+        cv.put(KEY_NAME,player.getName());
+        cv.put(KEY_PH_NO,player.getPhoneNumber());
+        cv.put(KEY_DECK_CHOICE,player.getDeckChoice());
+
+        db.update(TABLE_PLAYER, cv, "user_name="+player.getUserName(), null);
+        Log.d("UPDATE_PLAYER", "updatePlayer: success");
         return player;
     }
 
