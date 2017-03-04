@@ -81,4 +81,20 @@ public class ManagerMode extends AppMode
 
         return true;
     }
+    public boolean updatePlayer(String name, String username, int phone, String deckChoice) {
+        Player player = TourneyManagerDao.GetPlayer(username);
+        if(player==null) return false;
+        player.setName(name);
+        player.setUserName(username);
+        player.setPhoneNumber(phone);
+        player.setDeckChoice(deckChoice);
+
+        try {
+            TourneyManagerDao.savePlayer(player); //db call
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
 }

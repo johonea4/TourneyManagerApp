@@ -1,6 +1,7 @@
 package edu.gatech.seclass.tourneymanager.Dao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import android.content.Context;
 
@@ -51,6 +52,26 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
 
         return playerNames;
     }
+        public static Player GetPlayer(String userName)
+        {
+//        PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+//        ArrayList<Player> players = playerDBHelper.getAllPlayers();
+            Iterator<Player> it = players.iterator();
+            while(it.hasNext())
+            {
+                Player p = it.next();
+                String uName = p.getUserName();
+                if(uName.compareTo(userName)==0)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+        public static boolean UpdatePlayer(Player p)
+        {
+            return true;
+        }
 
     public List<Tournament> GetTournaments() {
         //TODO

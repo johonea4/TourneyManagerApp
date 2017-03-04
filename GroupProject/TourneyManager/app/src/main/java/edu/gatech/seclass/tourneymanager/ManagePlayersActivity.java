@@ -28,6 +28,8 @@ public class ManagePlayersActivity extends Activity {
         m_mode = m_app.getappMode();
         playerList = (ListView) findViewById(R.id.playerListView);
         createPlayer = (Button)findViewById(R.id.createPlayerButton);
+        populatePlayers();
+        setListCallBack();
     }
 
     @Override
@@ -35,8 +37,7 @@ public class ManagePlayersActivity extends Activity {
     {
         super.onStart();
         m_mode = m_app.getappMode();
-        populatePlayers();
-        setListCallBack();
+        adapter.notifyDataSetChanged();
     }
     public void onCreatePlayer(View view)
     {
@@ -48,9 +49,9 @@ public class ManagePlayersActivity extends Activity {
     //TODO: Populate player list with stored players from Database
     public void populatePlayers()
     {
-        ArrayList<String> players = TourneyManagerDao.GetPlayerNames(ManagePlayersActivity.this);
+        players = TourneyManagerDao.GetPlayerNames(ManagePlayersActivity.this);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, players);
+        adapter = adapter==null ? new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, players) : adapter;
         playerList.setAdapter(adapter);
     }
     public void setListCallBack()
@@ -73,4 +74,6 @@ public class ManagePlayersActivity extends Activity {
     private AppMode m_mode;
     private ListView playerList;
     private Button createPlayer;
+    ArrayAdapter adapter;
+    ArrayList<String> players;
 }

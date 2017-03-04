@@ -30,7 +30,8 @@ public class PlayerInfoActivity extends Activity {
         username = (EditText)findViewById(R.id.userNameField);
         phone = (EditText)findViewById(R.id.phoneField);
         deckChoice = (Spinner)findViewById(R.id.deckChoiceSpinner);
-
+        adapter = ArrayAdapter.createFromResource(this, R.array.deckChoice_array, android.R.layout.simple_spinner_item);
+        deckChoice.setAdapter(adapter);
     }
 
     @Override
@@ -53,20 +54,37 @@ public class PlayerInfoActivity extends Activity {
             prizeList.setVisibility(ListView.VISIBLE);
             addPlayer.setVisibility(Button.VISIBLE);
             String p = getIntent().getStringExtra("playerUserName");
+            Player po = TourneyManagerDao.GetPlayer(p);
+            if(po!=null)
+            {
+                name.setText(po.getName());
+                username.setText(po.getUserName());
+                phone.setText(String.valueOf(po.getPhoneNumber()));
+                deckChoice.setSelection(adapter.getPosition(po.getDeckChoice()));
+            }
+            else
+                finish();
 
         }
         else
         {
             addPlayer.setVisibility(Button.INVISIBLE);
             String p = getIntent().getStringExtra("playerUserName");
+            Player po = TourneyManagerDao.GetPlayer(p);
+            if(po!=null)
+            {
+                name.setText(po.getName());
+                username.setText(po.getUserName());
+                phone.setText(po.getPhoneNumber());
+                deckChoice.setSelection(adapter.getPosition(po.getDeckChoice()));
+            }
+            else
+                finish();
         }
 
-        Spinner deckSpinner = (Spinner) findViewById(R.id.deckChoiceSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deckChoice_array, android.R.layout.simple_spinner_item);
-        deckSpinner.setAdapter(adapter);
+
     }
 
-    //TODO: Populate Deck Choice Spinner
     //TODO: Populate PrizeList and set action to show prize info Activity
 
     public void onCreatePlayer(View view)
@@ -80,13 +98,23 @@ public class PlayerInfoActivity extends Activity {
         String deckChoiceStr = deckChoice.getSelectedItem().toString();
 
         if(valid){
-            if(!((ManagerMode)m_mode).createPlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr)){
-                Toast.makeText(PlayerInfoActivity.this,"Unable to create player",Toast.LENGTH_SHORT).show();
-                return;
+            Intent intent = getIntent();
+            if(!intent.getBooleanExtra("doPlayerAdd",false)) {
+                if (!((ManagerMode) m_mode).createPlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr)) {
+                    Toast.makeText(PlayerInfoActivity.this, "Unable to create player", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
+            else
+            {
+                if(!((ManagerMode)m_mode).updatePlayer(nameStr, usernameStr, phoneNumber, deckChoiceStr))
+                {
+                    Toast.makeText(PlayerInfoActivity.this, "Unable to update player", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            finish();
         }
-
-        finish();
     }
 
     private boolean validateInputs()
@@ -117,4 +145,5 @@ public class PlayerInfoActivity extends Activity {
     private EditText username;
     private EditText phone;
     private Spinner deckChoice;
+    ArrayAdapter<CharSequence> adapter;
 }
