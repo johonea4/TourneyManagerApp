@@ -24,6 +24,8 @@ public class MatchDBHelper extends AbstractHelper{
     private static final String KEY_PLAYER2 = "player2";
     private static final String KEY_IS_RUNNING = "is_running";
     private static final String KEY_IS_FINISHED = "is_finished";
+    private static final String KEY_ROUND_ID = "round_id";
+    private static final String KEY_TOURNAMENT_ID = "tournament_id";
 
     public MatchDBHelper(Context context) {
         super(context);
@@ -33,6 +35,8 @@ public class MatchDBHelper extends AbstractHelper{
     public void onCreate(SQLiteDatabase db) {
         String CREATE_MATCH_TABLE = "CREATE TABLE " + TABLE_MATCH + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_ROUND_ID + " INTEGER,"
+                + KEY_TOURNAMENT_ID + " INTEGER,"
                 + KEY_WINNER + " TEXT,"
                 + KEY_PLAYER1 + " TEXT,"
                 + KEY_PLAYER2 + " TEXT,"
@@ -76,6 +80,8 @@ public class MatchDBHelper extends AbstractHelper{
         values.put(KEY_PLAYER2, match.getPlayer2());
         values.put(KEY_IS_RUNNING, intforboolean(match.isRunning()));
         values.put(KEY_IS_FINISHED, intforboolean(match.isFinished()));
+        values.put(KEY_ROUND_ID, match.getRoundId());
+        values.put(KEY_TOURNAMENT_ID, match.getTournamentId());
 
         db.insert(TABLE_MATCH, null, values);
         db.close();
@@ -85,15 +91,22 @@ public class MatchDBHelper extends AbstractHelper{
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_MATCH, new String[] {
-                        KEY_ID, KEY_WINNER, KEY_PLAYER1, KEY_PLAYER2, KEY_IS_RUNNING, KEY_IS_FINISHED },
+                        KEY_ID, KEY_WINNER, KEY_PLAYER1, KEY_PLAYER2, KEY_IS_RUNNING, KEY_IS_FINISHED, KEY_ROUND_ID, KEY_TOURNAMENT_ID },
                 KEY_ID + "=?",
                 new String[] { String.valueOf(key) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Match match = new Match(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), cursor.getString(3),
-                booleanforint(Integer.parseInt(cursor.getString(4))), booleanforint(Integer.parseInt(cursor.getString(5))));
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                booleanforint(Integer.parseInt(cursor.getString(4))),
+                booleanforint(Integer.parseInt(cursor.getString(5))),
+                Integer.parseInt(cursor.getString(6)),
+                Integer.parseInt(cursor.getString(7))
+
+        );
         return match;
     }
 
@@ -115,6 +128,8 @@ public class MatchDBHelper extends AbstractHelper{
                 match.setPlayer2(cursor.getString(3));
                 match.setRunning(booleanforint(Integer.parseInt(cursor.getString(4))));
                 match.setFinished(booleanforint(Integer.parseInt(cursor.getString(5))));
+                match.setRoundId(Integer.parseInt(cursor.getString(6)));
+                match.setTournamentId(Integer.parseInt(cursor.getString(7)));
 
                 matchList.add(match);
             } while (cursor.moveToNext());

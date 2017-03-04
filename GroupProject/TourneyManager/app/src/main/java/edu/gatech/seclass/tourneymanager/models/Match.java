@@ -7,8 +7,8 @@ package edu.gatech.seclass.tourneymanager.models;
 public class Match
 {
     private int id;
-//    private int roundId;
-//    private int tournamentId;
+     private int roundId;
+    private int tournamentId;
     private String winner;
     private String player1;
     private String player2;
@@ -18,13 +18,15 @@ public class Match
     public Match() {
     }
 
-    public Match(int id, String winner, String player1, String player2, boolean running, boolean finished) {
+    public Match(int id, String winner, String player1, String player2, boolean running, boolean finished, int roundId, int tournamentId) {
         this.id = id;
         this.winner = winner;
         this.player1 = player1;
         this.player2 = player2;
         this.running = running;
         this.finished = finished;
+        this.roundId = roundId;
+        this.tournamentId = tournamentId;
     }
 
     public void setId(int Id)
@@ -37,21 +39,21 @@ public class Match
         return id;
     }
 
-//    public int getRoundId() {
-//        return roundId;
-//    }
-//
-//    public void setRoundId(int roundId) {
-//        this.roundId = roundId;
-//    }
-//
-//    public int getTournamentId() {
-//        return tournamentId;
-//    }
-//
-//    public void setTournamentId(int tournamentId) {
-//        this.tournamentId = tournamentId;
-//    }
+    public int getRoundId() {
+        return roundId;
+    }
+
+    public void setRoundId(int roundId) {
+        this.roundId = roundId;
+    }
+
+    public int getTournamentId() {
+        return tournamentId;
+    }
+
+    public void setTournamentId(int tournamentId) {
+        this.tournamentId = tournamentId;
+    }
 
     public void setWinners(String winner)
     {
