@@ -75,7 +75,7 @@ public class PlayerInfoActivity extends Activity {
             {
                 name.setText(po.getName());
                 username.setText(po.getUserName());
-                phone.setText(po.getPhoneNumber());
+                phone.setText(String.valueOf(po.getPhoneNumber()));
                 deckChoice.setSelection(adapter.getPosition(po.getDeckChoice()));
             }
             else
