@@ -93,7 +93,7 @@ public class PlayerDBHelper extends AbstractHelper {
         cv.put(KEY_PH_NO,player.getPhoneNumber());
         cv.put(KEY_DECK_CHOICE,player.getDeckChoice());
 
-        db.update(TABLE_PLAYER, cv, "user_name="+player.getUserName(), null);
+        db.update(TABLE_PLAYER, cv, "user_name='"+player.getUserName()+"'", null);
         Log.d("UPDATE_PLAYER", "updatePlayer: success");
         return player;
     }

@@ -75,6 +75,20 @@ public class TournamentDBHelper extends AbstractHelper {
         db.close(); // Closing database connection
     }
 
+
+    // Adding new player
+    public void updateTournament(Tournament tournament) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, tournament.getId());
+        values.put(KEY_IS_RUNNING, intforboolean(tournament.isRunning()));
+        values.put(KEY_IS_ENDED_EARLY, intforboolean(tournament.isEndedEarly()));
+
+        db.update(TABLE_TOURNAMENT, values, "id="+tournament.getId(), null);
+        db.close();
+    }
+
     public Tournament getTournament(int key) {
         SQLiteDatabase db = this.getReadableDatabase();
 

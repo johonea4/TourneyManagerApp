@@ -87,6 +87,23 @@ public class MatchDBHelper extends AbstractHelper{
         db.close();
     }
 
+    public void updateMatch(Match match) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, match.getId());
+        values.put(KEY_WINNER, match.getWinners());
+        values.put(KEY_PLAYER1, match.getPlayer1());
+        values.put(KEY_PLAYER2, match.getPlayer2());
+        values.put(KEY_IS_RUNNING, intforboolean(match.isRunning()));
+        values.put(KEY_IS_FINISHED, intforboolean(match.isFinished()));
+        values.put(KEY_ROUND_ID, match.getRoundId());
+        values.put(KEY_TOURNAMENT_ID, match.getTournamentId());
+
+        db.update(TABLE_MATCH, values, "id="+match.getId(), null);
+        db.close();
+    }
+
     public Match getMatch(int key) {
         SQLiteDatabase db = this.getReadableDatabase();
 
