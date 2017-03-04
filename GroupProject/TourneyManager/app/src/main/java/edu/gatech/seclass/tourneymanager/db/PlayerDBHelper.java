@@ -34,7 +34,7 @@ public class PlayerDBHelper extends AbstractHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_PLAYER + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_USER_NAME + " TEXT PRIMARY KEY,"
+                + KEY_USER_NAME + " TEXT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_PH_NO + " INTEGER,"
                 + KEY_DECK_CHOICE + " TEXT"
