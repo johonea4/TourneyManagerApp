@@ -46,13 +46,8 @@ public class RoundsListActivity extends Activity {
 
         if(TourneyManagerDao.GetActiveTournament(RoundsListActivity.this)!=null)
         {
-            matches = TourneyManagerDao.GetMatchesByTourneyId(TourneyManagerDao.GetActiveTournament(RoundsListActivity.this).getId(),RoundsListActivity.this);
-            HashMap< Integer, ArrayList<Match> > matchMap = new HashMap<Integer, ArrayList<Match> >();
-            for(Match m : matches)
-            {
-                if(!matchMap.containsKey(m.getRoundId())) matchMap.put(m.getRoundId(),new ArrayList<Match>());
-                matchMap.get(m.getRoundId()).add(m);
-            }
+            HashMap< Integer, ArrayList<Match> > matchMap;
+            matchMap = TourneyManagerDao.GetMatchesByTourneyId(TourneyManagerDao.GetActiveTournament(RoundsListActivity.this).getId(),RoundsListActivity.this);
 
             Set<Integer> keys = matchMap.keySet();
             for(Integer i : keys)

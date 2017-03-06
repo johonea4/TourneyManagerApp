@@ -2,9 +2,12 @@ package edu.gatech.seclass.tourneymanager;
 
 import android.content.Context;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
+import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
@@ -40,29 +43,70 @@ public class ManagerMode extends AppMode
         } catch (Exception e) {
             return false;
         }
-        return createRounds(context,tourneyId);
+        return createRounds(context,tourneyId, players.size());
     }
 
-    private boolean createRounds(Context context, int tId){
+    private boolean createRounds(Context context, int tId, int nPlayers){
 
-        int listOfRounds = 4;
-        int matches = 8;
+        if(nPlayers%2>0) nPlayers+=1;
+        int rounds=0,matches=0;
+        ArrayList<Round> roundList = new ArrayList<Round>();
 
-        ArrayList<Round> rounds = new ArrayList<Round>();
-
-        for(int i=0; i<listOfRounds; i++){
+        for(int i=nPlayers;i>1;i=(i/2))
+        {
             Round round = new Round(tId);
-            round.setId(i+1);
-            //round.setTournamentId(Integer.parseInt(tourneyID.getText().toString()));
-            rounds.add(round);
-            round.createMatches(matches,round.getId());
-            matches = matches / 2;
+            round.setId(tId+i+1);
+            roundList.add(round);
+            round.createMatches(i/2,round.getId());
         }
 
         try {
-            TourneyManagerDao.saveRounds(rounds, context);
+            TourneyManagerDao.saveRounds(roundList, context);
         } catch (Exception e) {
             return false;
+        }
+
+        return true;
+    }
+
+    public boolean SetNextRound(int curRoundId, int tid, Context context)
+    {
+        if(curRoundId==-1)
+        {
+            int rid = tid+1;
+            Tournament t = TourneyManagerDao.GetActiveTournament(context);
+            Round r = TourneyManagerDao.GetRound(tid,rid,context);
+            String [] n = t.getInfo().getUserNames().toArray(new String[t.getInfo().getUserNames().size()]);
+            int i=0;
+            for(Match m : r.getMatches())
+            {
+                if(i<t.getInfo().getNumberOfEntrants()-1) {
+                    m.setPlayer1(n[i++]);
+                    m.setPlayer2(n[i++]);
+                }
+                else return false;
+                TourneyManagerDao.UpdateMatch(m,context);
+            }
+        }
+        else
+        {
+            Round r1 = TourneyManagerDao.GetRound(tid,curRoundId,context);
+            Round r2 = TourneyManagerDao.GetRound(tid,curRoundId+1,context);
+            String [] w = r1.getWinners().toArray(new String[r1.getWinners().size()]);
+            int nWinners = r1.getWinners().size();
+            int i=0;
+            for(Match m : r2.getMatches())
+            {
+                if(i<nWinners-1)
+                {
+                    m.setPlayer1(w[i++]);
+                    m.setPlayer2(w[i++]);
+                }
+                else
+                    return false;
+                TourneyManagerDao.UpdateMatch(m,context);
+            }
+
         }
 
         return true;

@@ -1,6 +1,7 @@
 package edu.gatech.seclass.tourneymanager.Dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import android.content.Context;
@@ -103,15 +104,40 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
             }
         }
 
-        public static List<Match> GetMatchesByTourneyId(int tourneyId, Context context)
+        public static Round GetRound(int tid, int id, Context context)
+        {
+            List<Match> matches = TourneyManagerDao.GetMatchesByRoundId(id,context);
+            if(matches.size()<=0) return null;
+            Round r = new Round(tid);
+            Round.RoundState state = TourneyManagerDao.GetRoundState(id,context);
+
+            if(state== Round.RoundState.NOT_STARTED) { r.setFinished(false); r.setRunning(false); }
+            else if(state == Round.RoundState.RUNNING){ r.setFinished(false); r.setRunning(true); }
+            else if(state==Round.RoundState.FINISHED) { r.setFinished(true); r.setRunning(false); }
+
+            r.setMatches(matches);
+
+            List<String> winners = new ArrayList<String>();
+            for(Match m : matches)
+            {
+                if(!m.getWinners().isEmpty())
+                    winners.add(m.getWinners());
+            }
+            r.setWinners(winners);
+
+            return r;
+        }
+
+        public static HashMap<Integer,ArrayList<Match> > GetMatchesByTourneyId(int tourneyId, Context context)
         {
             MatchDBHelper matchDBHelper = new MatchDBHelper(context);
             List<Match> matches = matchDBHelper.getAllMatches();
-            List<Match> matchesByTourneyId = new ArrayList<Match>();
+            HashMap<Integer,ArrayList<Match> > matchesByTourneyId = new HashMap<Integer, ArrayList<Match> >();
 
-            for(Match match : matches){
-                if(tourneyId == match.getTournamentId()){
-                    matchesByTourneyId.add(match);
+            for(Match m : matches){
+                if(tourneyId == m.getTournamentId()){
+                    if(!matchesByTourneyId.containsKey(m.getRoundId())) matchesByTourneyId.put(m.getRoundId(),new ArrayList<Match>());
+                    matchesByTourneyId.get(m.getRoundId()).add(m);
                 }
             }
             return matchesByTourneyId;
@@ -129,6 +155,23 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
                 }
             }
             return matchesByRoundId;
+        }
+
+        public static Round.RoundState GetRoundState(int roundId, Context context)
+        {
+            List<Match> matches = TourneyManagerDao.GetMatchesByRoundId(roundId,context);
+            boolean running = false;
+            boolean finished = false;
+
+            for(Match m : matches)
+            {
+                running |= m.isRunning();
+                finished |= m.isFinished();
+            }
+            if(!running && !finished) return Round.RoundState.NOT_STARTED;
+            if(running) return Round.RoundState.RUNNING;
+            if(!running && finished) return Round.RoundState.FINISHED;
+            return Round.RoundState.NOT_STARTED;
         }
 
         public static Match GetMatchById(int matchId, Context context)

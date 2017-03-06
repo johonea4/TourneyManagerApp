@@ -11,10 +11,12 @@ public class Round
 {
     private int id;
     private int tournamentId;
-    private ArrayList<String> winners;
-    private ArrayList<Match> matches;
+    private List<String> winners;
+    private List<Match> matches;
     private boolean running;
     private boolean finished;
+
+    public enum RoundState { NOT_STARTED, RUNNING, FINISHED };
 
     public Round(int tId) { tournamentId=tId; }
 
@@ -36,7 +38,7 @@ public class Round
         this.tournamentId = tournamentId;
     }
 
-    public void setWinners(ArrayList<String> winners) {
+    public void setWinners(List<String> winners) {
         this.winners = winners;
     }
 
@@ -44,8 +46,8 @@ public class Round
         return winners;
     }
 
-    private void setMatches(ArrayList<Match> matches) {
-        this.matches = matches;
+    public void setMatches(List<Match> m) {
+        this.matches = m;
     }
 
     public List<Match> getMatches() {
