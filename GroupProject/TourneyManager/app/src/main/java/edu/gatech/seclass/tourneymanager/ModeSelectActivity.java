@@ -14,8 +14,8 @@ public class ModeSelectActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mode_select);
 
-        manager = new ManagerMode();
-        player = new PlayerMode();
+        manager = new ManagerMode((TourneyManagerApp) getApplication());
+        player = new PlayerMode((TourneyManagerApp) getApplication());
         managerButton = (Button)findViewById(R.id.manager_button);
         playerButton = (Button)findViewById(R.id.player_button);
     }

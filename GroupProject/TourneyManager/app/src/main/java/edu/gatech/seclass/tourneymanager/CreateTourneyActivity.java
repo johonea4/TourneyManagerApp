@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,10 +55,16 @@ public class CreateTourneyActivity extends Activity {
         housePercent = (EditText) findViewById(R.id.housePercentField);
         playerFee = (EditText)findViewById(R.id.feeField);
         houseCut = (EditText)findViewById(R.id.houseCutField);
+        houseCut.setInputType(InputType.TYPE_NULL);
         firstPlace = (EditText)findViewById(R.id.firstField);
+        firstPlace.setInputType(InputType.TYPE_NULL);
         secondPlace = (EditText)findViewById(R.id.secondField);
+        secondPlace.setInputType(InputType.TYPE_NULL);
         thirdPlace = (EditText)findViewById(R.id.thirdField);
+        thirdPlace.setInputType(InputType.TYPE_NULL);
         tourneyID = (EditText)findViewById(R.id.tourneyIdField);
+        tourneyID.setInputType(InputType.TYPE_NULL);
+        tourneyID.setText(String.valueOf(m_app.getLastTourneyId()+1));
         startButton = (Button)findViewById(R.id.tourneyStartButton);
         addPlayer = (Button)findViewById(R.id.addPlayerButton);
         removePlayer = (Button)findViewById(R.id.removePlayerButton);
@@ -86,7 +93,6 @@ public class CreateTourneyActivity extends Activity {
     {
         super.onStart();
         m_mode = m_app.getappMode();
-        tournament = new Tournament();
         Intent i = getIntent();
         if(i.getBooleanExtra("ManagerCreate",false))
         {
@@ -157,6 +163,12 @@ public class CreateTourneyActivity extends Activity {
         thirdPlace.setText(String.valueOf(tVal));
     }
 
+    public static boolean powerof2Check(int x)
+    {
+        while (((x & 1) == 0) && x > 1) /* While x is even and > 1 */
+            x >>= 1;
+        return (x == 1);
+    }
     public void onStartTournament(View view)
     {
         String feeString = playerFee.getText().toString();
@@ -168,9 +180,9 @@ public class CreateTourneyActivity extends Activity {
             return;
         }
         countVal = playerList.getCount();
-        if((countVal)<3)
+        if(!CreateTourneyActivity.powerof2Check(countVal))
         {
-            Toast.makeText(CreateTourneyActivity.this,"Need at least 3 players",Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateTourneyActivity.this,"Number of players must be a power of 2!",Toast.LENGTH_SHORT).show();
             return;
         }
         if(percentString==null || percentString.length()<=0 || (percentVal=Integer.parseInt(percentString))<0 || (percentVal)>100)
@@ -178,18 +190,19 @@ public class CreateTourneyActivity extends Activity {
             Toast.makeText(CreateTourneyActivity.this,"House Percentage Invalid",Toast.LENGTH_SHORT).show();
             return;
         }
-        m_app.setTourneyRunning(true);
         recalculate(); //Recheck. not necessarily required
 
         if(errors==0)
         {
             int tourneyId = Integer.parseInt(tourneyID.getText().toString());
             //createTournament();
-            if(!((ManagerMode)m_mode).createTournament(players, tourneyId, cutVal, fVal, sVal, tVal, CreateTourneyActivity.this)){
+            if(!((ManagerMode)m_mode).createTournament(players, tourneyId, percentVal, feeVal, CreateTourneyActivity.this)){
                 Toast.makeText(CreateTourneyActivity.this,"Tournament was unable to be created",Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            m_app.setLastTourneyId(tourneyId);
+            m_app.setTourneyRunning(true);
+            ((ManagerMode)m_mode).SetNextRound(-1,tourneyId,CreateTourneyActivity.this);
             finish();
         }
     }
@@ -245,19 +258,6 @@ public class CreateTourneyActivity extends Activity {
         }
     }
 
-    private void createTournament() {
-
-        tournament.setId(Integer.parseInt(tourneyID.getText().toString()));
-        tournament.setRunning(true);
-
-        tourneyInfo = new TourneyInfo();
-        tourneyInfo.setHouseCut(cutVal);
-        tourneyInfo.setFirstPlacePrize(fVal);
-        tourneyInfo.setSecondPlacePrize(sVal);
-        tourneyInfo.setThirdPlacePrize(tVal);
-
-        tournament.setInfo(tourneyInfo);
-    }
 
     //Private Members
     private TourneyManagerApp m_app;
@@ -277,10 +277,6 @@ public class CreateTourneyActivity extends Activity {
     ArrayAdapter<String> playersAdapter;
     ArrayList<String> players;
     String currentPlayer;
-
-    private Tournament tournament;
-    private TourneyInfo tourneyInfo;
-    private ArrayList<Round> rounds;
 
     int errors;
     int cutVal;

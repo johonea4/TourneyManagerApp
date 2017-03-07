@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.gatech.seclass.tourneymanager.models.Tournament;
+import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
 /**
  * Created by rugrani on 3/2/17.
@@ -22,6 +24,10 @@ public class TournamentDBHelper extends AbstractHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_IS_RUNNING = "is_running";
     private static final String KEY_IS_ENDED_EARLY = "is_ended_early";
+    private static final String KEY_HOUSE_PERCENT = "KEY_HOUSE_PERCENT";
+    private static final String KEY_PLAYER_FEE = "KEY_PLAYER_FEE";
+    private static final String KEY_NUM_ENTRANTS = "KEY_NUM_ENTRANTS";
+    private static final String KEY_PLAYER_LIST = "KEY_PLAYER_LIST";
 
     public TournamentDBHelper(Context context) {
         super(context);
@@ -31,7 +37,11 @@ public class TournamentDBHelper extends AbstractHelper {
         String CREATE_PLAYER_TABLE = "CREATE TABLE " + TABLE_TOURNAMENT + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_IS_RUNNING + " INT,"
-                + KEY_IS_ENDED_EARLY + " INT"
+                + KEY_IS_ENDED_EARLY + " INT,"
+                + KEY_HOUSE_PERCENT + " INT,"
+                + KEY_PLAYER_FEE + " INT,"
+                + KEY_NUM_ENTRANTS + " INT,"
+                + KEY_PLAYER_LIST + " TEXT"
                 + ")";
         db.execSQL(CREATE_PLAYER_TABLE);
     }
@@ -68,6 +78,15 @@ public class TournamentDBHelper extends AbstractHelper {
         values.put(KEY_ID, tournament.getId());
         values.put(KEY_IS_RUNNING, intforboolean(tournament.isRunning()));
         values.put(KEY_IS_ENDED_EARLY, intforboolean(tournament.isEndedEarly()));
+        values.put(KEY_HOUSE_PERCENT, tournament.getInfo().getHousePercent());
+        values.put(KEY_PLAYER_FEE, tournament.getInfo().getEntryPrice());
+        values.put(KEY_NUM_ENTRANTS, tournament.getInfo().getNumberOfEntrants());
+        String pList = "";
+        for(String un : tournament.getInfo().getUserNames())
+        {
+            pList += un + ';';
+        }
+        values.put(KEY_PLAYER_LIST,pList);
 
         // Inserting Row
         db.insert(TABLE_TOURNAMENT, null, values);
@@ -83,7 +102,15 @@ public class TournamentDBHelper extends AbstractHelper {
         values.put(KEY_ID, tournament.getId());
         values.put(KEY_IS_RUNNING, intforboolean(tournament.isRunning()));
         values.put(KEY_IS_ENDED_EARLY, intforboolean(tournament.isEndedEarly()));
-
+        values.put(KEY_HOUSE_PERCENT, tournament.getInfo().getHousePercent());
+        values.put(KEY_PLAYER_FEE, tournament.getInfo().getEntryPrice());
+        values.put(KEY_NUM_ENTRANTS, tournament.getInfo().getNumberOfEntrants());
+        String pList = "";
+        for(String un : tournament.getInfo().getUserNames())
+        {
+            pList += un + ';';
+        }
+        values.put(KEY_PLAYER_LIST,pList);
         db.update(TABLE_TOURNAMENT, values, "id="+tournament.getId(), null);
         db.close();
     }
@@ -99,7 +126,28 @@ public class TournamentDBHelper extends AbstractHelper {
             cursor.moveToFirst();
 
         Tournament tournament = new Tournament(Integer.parseInt(cursor.getString(0)),
-                booleanforint(Integer.parseInt(cursor.getString(0))), booleanforint(Integer.parseInt(cursor.getString(0))));
+                booleanforint(Integer.parseInt(cursor.getString(1))),
+                booleanforint(Integer.parseInt(cursor.getString(2))));
+
+        TourneyInfo info = new TourneyInfo();
+        tournament.setInfo(info);
+        tournament.getInfo().setHousePercent(cursor.getInt(3));
+        tournament.getInfo().setEntryPrice(cursor.getInt(4));
+        tournament.getInfo().setNumberOfEntrants(cursor.getInt(5));
+        tournament.getInfo().setCalculatedValues();
+        List<String> tok;
+        ArrayList<String> uNames = new ArrayList<String>();
+        String pList = cursor.getString(6);
+        tok = Arrays.asList(pList.split(";"));
+        for(String s : uNames)
+        {
+            if(s!=null && !s.isEmpty())
+            {
+                uNames.add(s);
+            }
+        }
+        tournament.getInfo().setUserNames(uNames);
+
         return tournament;
     }
 
@@ -118,6 +166,24 @@ public class TournamentDBHelper extends AbstractHelper {
                 tournament.setId(Integer.parseInt(cursor.getString(0)));
                 tournament.setRunning(booleanforint(Integer.parseInt(cursor.getString(1))));
                 tournament.setEndedEarly(booleanforint(Integer.parseInt(cursor.getString(2))));
+                TourneyInfo info = new TourneyInfo();
+                tournament.setInfo(info);
+                tournament.getInfo().setHousePercent(cursor.getInt(3));
+                tournament.getInfo().setEntryPrice(cursor.getInt(4));
+                tournament.getInfo().setNumberOfEntrants(cursor.getInt(5));
+                tournament.getInfo().setCalculatedValues();
+                List<String> tok;
+                ArrayList<String> uNames = new ArrayList<String>();
+                String pList = cursor.getString(6);
+                tok = Arrays.asList(pList.split(";"));
+                for(String s : tok)
+                {
+                    if(s!=null && !s.isEmpty())
+                    {
+                        uNames.add(s);
+                    }
+                }
+                tournament.getInfo().setUserNames(uNames);
                 // Adding player to list
                 tournamentList.add(tournament);
             } while (cursor.moveToNext());

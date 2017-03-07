@@ -30,6 +30,7 @@ public class RoundsListActivity extends Activity {
         roundsList = (ListView)findViewById(R.id.roundsList);
         rounds = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(RoundsListActivity.this, android.R.layout.simple_list_item_1, rounds);
+        roundsList.setAdapter(adapter);
         setListCallback();
     }
 
@@ -77,6 +78,7 @@ public class RoundsListActivity extends Activity {
                 TextView item = (TextView)view;
                 String s = item.getText().toString();
                 String num = s.substring(6,s.indexOf('-'));
+                num = num.replaceAll(" ","");
                 int n = Integer.parseInt(num);
 
                 Intent i = new Intent(RoundsListActivity.this,RoundInfoActivity.class);

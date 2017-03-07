@@ -106,7 +106,10 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
         public static Round GetRound(int tid, int id, Context context)
         {
-            List<Match> matches = TourneyManagerDao.GetMatchesByRoundId(id,context);
+            HashMap<Integer,ArrayList<Match> > MatchMap = TourneyManagerDao.GetMatchesByTourneyId(tid,context);
+            List<Match> matches;
+            if(id==-1) matches = MatchMap.get(MatchMap.keySet().toArray()[0]);
+            else matches = MatchMap.get(id);
             if(matches.size()<=0) return null;
             Round r = new Round(tid);
             Round.RoundState state = TourneyManagerDao.GetRoundState(id,context);
@@ -120,7 +123,7 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
             List<String> winners = new ArrayList<String>();
             for(Match m : matches)
             {
-                if(!m.getWinners().isEmpty())
+                if(m.getWinners() != null && !m.getWinners().isEmpty())
                     winners.add(m.getWinners());
             }
             r.setWinners(winners);

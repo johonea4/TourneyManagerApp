@@ -54,6 +54,26 @@ public class TourneyManagerApp extends Application
     {
         return pref.getInt("lastTid",0);
     }
+    public void setLastMatchId(int id)
+    {
+        edit.putInt("lastMid",id);
+        edit.commit();
+    }
+
+    public int getLastMatchId()
+    {
+        return pref.getInt("lastMid",0);
+    }
+    public void setLastRoundId(int id)
+    {
+        edit.putInt("lastRid",id);
+        edit.commit();
+    }
+
+    public int getLastRoundId()
+    {
+        return pref.getInt("lastRid",0);
+    }
 
     //Private Memebrs
     private AppMode appMode;

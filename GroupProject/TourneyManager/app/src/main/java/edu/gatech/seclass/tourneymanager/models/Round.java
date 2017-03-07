@@ -74,13 +74,13 @@ public class Round
         return finished;
     }
 
-    public void createMatches(int matchCount, int Id) {
+    public void createMatches(int matchCount, int Id, int idStart) {
 
         matches = new ArrayList<Match>();
         for(int i=0; i<matchCount; i++)
         {
             Match match = new Match();
-            match.setId(i+1);
+            match.setId(++idStart);
             match.setRoundId(Id);
             match.setTournamentId(tournamentId);
             matches.add(match);

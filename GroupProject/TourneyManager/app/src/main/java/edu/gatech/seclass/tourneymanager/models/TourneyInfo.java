@@ -20,6 +20,19 @@ public class TourneyInfo
     int ThirdPlacePrize;
     int houseCut;
 
+    public void setCalculatedValues()
+    {
+        int potVal = numberOfEntrants*entryPrice;
+        int cutVal = (int)((double)potVal * ((double)(housePercent)/100.0));
+        int fVal = (int)((double)(potVal-cutVal)*0.5);
+        int sVal = (int)((double)(potVal-cutVal)*0.3);
+        int tVal = (int)((double)(potVal-cutVal)*0.2);
+
+        houseCut = cutVal;
+        firstPlacePrize = fVal;
+        secondPlacePrize = sVal;
+        ThirdPlacePrize = tVal;
+    }
     public int getHousePercent() {
         return housePercent;
     }
@@ -72,31 +85,16 @@ public class TourneyInfo
         return firstPlacePrize;
     }
 
-    public void setFirstPlacePrize(int firstPlacePrize) {
-        this.firstPlacePrize = firstPlacePrize;
-    }
-
     public int getSecondPlacePrize() {
         return secondPlacePrize;
-    }
-
-    public void setSecondPlacePrize(int secondPlacePrize) {
-        this.secondPlacePrize = secondPlacePrize;
     }
 
     public int getThirdPlacePrize() {
         return ThirdPlacePrize;
     }
 
-    public void setThirdPlacePrize(int thirdPlacePrize) {
-        ThirdPlacePrize = thirdPlacePrize;
-    }
-
     public int getHouseCut() {
         return houseCut;
     }
 
-    public void setHouseCut(int houseCut) {
-        this.houseCut = houseCut;
-    }
 }

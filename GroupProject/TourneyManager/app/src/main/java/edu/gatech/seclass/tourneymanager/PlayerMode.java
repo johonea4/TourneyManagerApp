@@ -6,8 +6,11 @@ package edu.gatech.seclass.tourneymanager;
 
 public class PlayerMode extends AppMode
 {
-    PlayerMode()
+    PlayerMode(TourneyManagerApp app)
     {
         super(mode_t.PLAYER);
+        m_app = app;
     }
+
+    private TourneyManagerApp m_app;
 }

@@ -19,22 +19,24 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
 public class ManagerMode extends AppMode
 {
-    ManagerMode()
+    ManagerMode(TourneyManagerApp app)
     {
         super(mode_t.MANAGER);
+        m_app = app;
     }
 
-    public boolean createTournament(ArrayList<String> players, int tourneyId, int cutVal, int fVal, int sVal, int tVal, Context context) {
+    public boolean createTournament(ArrayList<String> players, int tourneyId, int percent, int fee, Context context) {
 
         Tournament tournament = new Tournament();
         tournament.setId(tourneyId);
         tournament.setRunning(true);
 
         TourneyInfo tourneyInfo = new TourneyInfo();
-        tourneyInfo.setHouseCut(cutVal);
-        tourneyInfo.setFirstPlacePrize(fVal);
-        tourneyInfo.setSecondPlacePrize(sVal);
-        tourneyInfo.setThirdPlacePrize(tVal);
+        tourneyInfo.setEntryPrice(fee);
+        tourneyInfo.setUserNames(players);
+        tourneyInfo.setHousePercent(percent);
+        tourneyInfo.setNumberOfEntrants(players.size());
+        tourneyInfo.setCalculatedValues();
 
         tournament.setInfo(tourneyInfo);
 
@@ -55,9 +57,11 @@ public class ManagerMode extends AppMode
         for(int i=nPlayers;i>1;i=(i/2))
         {
             Round round = new Round(tId);
-            round.setId(tId+i+1);
+            round.setId(m_app.getLastRoundId()+1);
+            m_app.setLastRoundId(round.getId());
             roundList.add(round);
-            round.createMatches(i/2,round.getId());
+            round.createMatches(i/2,round.getId(),m_app.getLastMatchId());
+            m_app.setLastMatchId(m_app.getLastMatchId()+(i/2));
         }
 
         try {
@@ -73,9 +77,8 @@ public class ManagerMode extends AppMode
     {
         if(curRoundId==-1)
         {
-            int rid = tid+1;
             Tournament t = TourneyManagerDao.GetActiveTournament(context);
-            Round r = TourneyManagerDao.GetRound(tid,rid,context);
+            Round r = TourneyManagerDao.GetRound(tid,-1,context);
             String [] n = t.getInfo().getUserNames().toArray(new String[t.getInfo().getUserNames().size()]);
             int i=0;
             for(Match m : r.getMatches())
@@ -143,4 +146,6 @@ public class ManagerMode extends AppMode
 
         return true;
     }
+
+    private TourneyManagerApp m_app;
 }
