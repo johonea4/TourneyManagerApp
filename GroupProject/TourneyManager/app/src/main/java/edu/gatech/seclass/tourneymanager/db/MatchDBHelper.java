@@ -139,14 +139,13 @@ public class MatchDBHelper extends AbstractHelper{
             do {
                 Match match = new Match();
                 match.setId(Integer.parseInt(cursor.getString(0)));
-                match.setWinners(cursor.getString(1));
-                match.setPlayer1(cursor.getString(2));
-                match.setPlayer2(cursor.getString(3));
-                match.setRunning(booleanforint(cursor.getInt(4)));
-                match.setFinished(booleanforint(cursor.getInt(5)));
-                match.setRoundId(cursor.getInt(6));
-                match.setTournamentId(cursor.getInt(7));
-
+                match.setRoundId(cursor.getInt(1));
+                match.setTournamentId(cursor.getInt(2));
+                match.setWinners(cursor.getString(3));
+                match.setPlayer1(cursor.getString(4));
+                match.setPlayer2(cursor.getString(5));
+                match.setRunning(booleanforint(cursor.getInt(6)));
+                match.setFinished(booleanforint(cursor.getInt(7)));
                 matchList.add(match);
             } while (cursor.moveToNext());
         }
