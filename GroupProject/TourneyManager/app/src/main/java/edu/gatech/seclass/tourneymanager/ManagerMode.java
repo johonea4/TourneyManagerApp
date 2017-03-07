@@ -112,7 +112,7 @@ public class ManagerMode extends AppMode
         return true;
     }
 
-    public boolean createPlayer(String name, String username, int phone, String deckChoice, Context context) {
+    public boolean createPlayer(String name, String username, String phone, String deckChoice, Context context) {
         Player player = new Player();
         player.setName(name);
         player.setUserName(username);
@@ -127,7 +127,7 @@ public class ManagerMode extends AppMode
 
         return true;
     }
-    public boolean updatePlayer(String name, String username, int phone, String deckChoice, Context context) {
+    public boolean updatePlayer(String name, String username, String phone, String deckChoice, Context context) {
         Player player = TourneyManagerDao.GetPlayerByUsername(username, context);
         if(player==null) return false;
         player.setName(name);

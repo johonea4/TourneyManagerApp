@@ -77,7 +77,7 @@ public class PlayerDBHelper extends AbstractHelper {
             cursor.moveToFirst();
 
         Player player = new Player(cursor.getInt(0),
-                cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4));
+                cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
         return player;
     }
 
@@ -112,7 +112,7 @@ public class PlayerDBHelper extends AbstractHelper {
                 player.setId(cursor.getInt(0));
                 player.setUserName(cursor.getString(1));
                 player.setName(cursor.getString(2));
-                player.setPhoneNumber(cursor.getInt(3));
+                player.setPhoneNumber(cursor.getString(3));
                 player.setDeckChoice(cursor.getString(4));
                 // Adding player to list
                 playerList.add(player);

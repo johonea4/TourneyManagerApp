@@ -11,7 +11,7 @@ public class Player
     private int id;
     private String name;
     private String userName;
-    private int phoneNumber;
+    private String phoneNumber;
     private String deckChoice;
     private List<Prize> prizes;
     private int matchesWon;
@@ -19,7 +19,7 @@ public class Player
     public Player() {
     }
 
-    public Player(int id, String name, String userName, int phoneNumber, String deckChoice) {
+    public Player(int id, String name, String userName, String phoneNumber, String deckChoice) {
         this.id = id;
         this.name = name;
         this.userName = userName;
@@ -27,7 +27,7 @@ public class Player
         this.deckChoice = deckChoice;
     }
 
-    public Player(String name, String userName, int phoneNumber, String deckChoice) {
+    public Player(String name, String userName, String phoneNumber, String deckChoice) {
         this.name = name;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
@@ -63,12 +63,12 @@ public class Player
         return userName;
     }
 
-    public void setPhoneNumber(int phoneNumber)
+    public void setPhoneNumber(String phoneNumber)
     {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getPhoneNumber()
+    public String getPhoneNumber()
     {
         return phoneNumber;
     }

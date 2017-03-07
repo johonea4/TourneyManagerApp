@@ -94,7 +94,7 @@ public class PlayerInfoActivity extends Activity {
         boolean valid = validateInputs();
         String nameStr = name.getText().toString();
         String usernameStr = username.getText().toString();
-        int phoneNumber = Integer.parseInt(phone.getText().toString());
+        String phoneNumber = phone.getText().toString();
         String deckChoiceStr = deckChoice.getSelectedItem().toString();
 
         if(valid){
@@ -128,9 +128,7 @@ public class PlayerInfoActivity extends Activity {
             username.setError("Invalid User Name");
             valid = false;
         }
-        try {
-            Integer.parseInt(phone.getText().toString());
-        } catch (NumberFormatException e) {
+        if(phone.getText().toString() == null || phone.getText().toString().isEmpty()){
             phone.setError("Invalid Phone Number");
             valid = false;
         }
