@@ -8,9 +8,11 @@ import android.content.Context;
 
 import edu.gatech.seclass.tourneymanager.db.MatchDBHelper;
 import edu.gatech.seclass.tourneymanager.db.PlayerDBHelper;
+import edu.gatech.seclass.tourneymanager.db.PrizeDBHelper;
 import edu.gatech.seclass.tourneymanager.db.TournamentDBHelper;
 import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
+import edu.gatech.seclass.tourneymanager.models.Prize;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
 
@@ -42,6 +44,8 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
                 Player p = it.next();
                 String uName = p.getUserName();
                 if (uName.compareTo(userName) == 0) {
+                    List<Prize> prizesForPlayer = getPrizes(uName, context);
+                    p.setPrizes(prizesForPlayer);
                     return p;
                 }
             }
@@ -194,5 +198,12 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
         {
             MatchDBHelper matchDBHelper = new MatchDBHelper(context);
             matchDBHelper.updateMatch(m);
+        }
+
+        private static List<Prize> getPrizes(String userName, Context context){
+            PrizeDBHelper prizeDBHelper = new PrizeDBHelper(context);
+            List<Prize> prizesForPlayer = prizeDBHelper.getPrizes(userName);
+
+            return prizesForPlayer;
         }
     }

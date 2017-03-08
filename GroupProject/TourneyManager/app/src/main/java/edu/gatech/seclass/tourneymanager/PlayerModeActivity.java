@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class PlayerModeActivity extends Activity {
 
@@ -15,18 +16,14 @@ public class PlayerModeActivity extends Activity {
 
         m_app = (TourneyManagerApp)getApplication();
         appMode = m_app.getappMode();
+        viewRoundsButton = (Button)findViewById(R.id.roundsButton_player);
     }
 
     public void setScreen()
     {
-        if(m_app.isTourneyRunning())
+        if(!m_app.isTourneyRunning())
         {
-            Intent playersTotalsLauncher = new Intent(PlayerModeActivity.this,PlayerTotalsActivity.class);
-            startActivity(playersTotalsLauncher);
-        }
-        else
-        {
-
+            viewRoundsButton.setVisibility(View.GONE);
         }
     }
 
@@ -60,5 +57,6 @@ public class PlayerModeActivity extends Activity {
     //Private members
     private TourneyManagerApp m_app;
     private AppMode appMode;
+    private Button viewRoundsButton;
 
 }
