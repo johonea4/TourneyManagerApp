@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -87,8 +88,9 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="291dp"
-            android:id="@+id/prizeList" />
+            android:layout_height="233dp"
+            android:id="@+id/prizeList"
+            android:layout_weight="0.97" />
 
         <Button
             android:id="@+id/addNewPlayerButton"
@@ -96,6 +98,13 @@
             android:layout_height="wrap_content"
             android:onClick="onCreatePlayer"
             android:text="Create Player" />
+
+        <Button
+            android:text="Remove Player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/removeButton"
+            android:onClick="onRemovePlayer" />
 
     </LinearLayout>
 </RelativeLayout>

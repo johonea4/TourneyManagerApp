@@ -16,6 +16,8 @@ public class Match
     private boolean finished;
 
     public Match() {
+        running=false;
+        finished=false;
     }
 
     public Match(int id, String winner, String player1, String player2, boolean running, boolean finished, int roundId, int tournamentId) {
@@ -77,7 +79,7 @@ public class Match
 
     public void setPlayer2(String player)
     {
-        this.player2 = player2;
+        this.player2 = player;
     }
 
     public String getPlayer2()

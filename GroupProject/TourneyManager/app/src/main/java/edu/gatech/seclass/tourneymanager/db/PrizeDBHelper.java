@@ -16,7 +16,7 @@ import edu.gatech.seclass.tourneymanager.models.Prize;
 
 public class PrizeDBHelper extends AbstractHelper {
 
-    private static final String TABLE_PRIZE = "player";
+    private static final String TABLE_PRIZE = "prize";
 
     private static final String KEY_ID = "id";
     private static final String KEY_USER_NAME = "user_name";

@@ -3,6 +3,7 @@ package edu.gatech.seclass.tourneymanager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +26,7 @@ public class PlayerInfoActivity extends Activity {
         m_mode = m_app.getappMode();
 
         addPlayer = (Button)findViewById(R.id.addNewPlayerButton);
+        rmPlayer = (Button)findViewById(R.id.removeButton);
         prizeList = (ListView)findViewById(R.id.prizeList);
         name = (EditText)findViewById(R.id.nameField);
         username = (EditText)findViewById(R.id.userNameField);
@@ -46,13 +48,22 @@ public class PlayerInfoActivity extends Activity {
             addPlayer.setText("Create Player");
             prizeList.setVisibility(ListView.INVISIBLE);
             addPlayer.setVisibility(Button.VISIBLE);
-
+            rmPlayer.setVisibility(Button.INVISIBLE);
+            name.setInputType(InputType.TYPE_CLASS_TEXT);
+            username.setInputType(InputType.TYPE_CLASS_TEXT);
+            phone.setInputType(InputType.TYPE_CLASS_PHONE);
+            deckChoice.setEnabled(true);
         }
         else if(m_mode.getMode()== AppMode.mode_t.MANAGER)
         {
             addPlayer.setText("Update Player");
             prizeList.setVisibility(ListView.VISIBLE);
             addPlayer.setVisibility(Button.VISIBLE);
+            rmPlayer.setVisibility(Button.VISIBLE);
+            name.setInputType(InputType.TYPE_CLASS_TEXT);
+            username.setInputType(InputType.TYPE_NULL);
+            phone.setInputType(InputType.TYPE_CLASS_PHONE);
+            deckChoice.setEnabled(true);
             String p = getIntent().getStringExtra("playerUserName");
             Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
             if(po!=null)
@@ -69,6 +80,11 @@ public class PlayerInfoActivity extends Activity {
         else
         {
             addPlayer.setVisibility(Button.INVISIBLE);
+            rmPlayer.setVisibility(Button.INVISIBLE);
+            name.setInputType(InputType.TYPE_NULL);
+            username.setInputType(InputType.TYPE_NULL);
+            phone.setInputType(InputType.TYPE_NULL);
+            deckChoice.setEnabled(false);
             String p = getIntent().getStringExtra("playerUserName");
             Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
             if(po!=null)
@@ -117,6 +133,13 @@ public class PlayerInfoActivity extends Activity {
         }
     }
 
+    public void onRemovePlayer(View view)
+    {
+        String p = getIntent().getStringExtra("playerUserName");
+        TourneyManagerDao.RemovePlayer(p,PlayerInfoActivity.this);
+        finish();
+    }
+
     private boolean validateInputs()
     {
         boolean valid = true;
@@ -138,6 +161,7 @@ public class PlayerInfoActivity extends Activity {
     private TourneyManagerApp m_app;
     private AppMode m_mode;
     private Button addPlayer;
+    private Button rmPlayer;
     private ListView prizeList;
     private EditText name;
     private EditText username;

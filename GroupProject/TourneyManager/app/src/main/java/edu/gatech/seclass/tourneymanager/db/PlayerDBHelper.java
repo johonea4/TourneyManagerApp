@@ -122,10 +122,10 @@ public class PlayerDBHelper extends AbstractHelper {
         return playerList;
     }
 
-    public void deletePlayer(Player player) {
+    public void deletePlayer(String uName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PLAYER, KEY_USER_NAME + " = ?",
-                new String[] { player.getUserName() });
+                new String[] { uName });
         db.close();
     }
 }

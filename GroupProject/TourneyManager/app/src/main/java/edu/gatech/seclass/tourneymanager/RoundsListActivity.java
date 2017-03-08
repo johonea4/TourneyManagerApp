@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Match;
@@ -51,19 +53,26 @@ public class RoundsListActivity extends Activity {
             matchMap = TourneyManagerDao.GetMatchesByTourneyId(TourneyManagerDao.GetActiveTournament(RoundsListActivity.this).getId(),RoundsListActivity.this);
 
             Set<Integer> keys = matchMap.keySet();
-            for(Integer i : keys)
+            SortedSet<Integer> sorted = new TreeSet<Integer>(keys);
+
+            for(Integer i : sorted)
             {
+                boolean notStarted = false;
                 boolean running = false;
                 boolean finished = false;
 
                 for(Match m : matchMap.get(i))
                 {
+                    notStarted |= (!m.isRunning() && !m.isFinished());
                     running |= m.isRunning();
                     finished |= m.isFinished();
                 }
-
+                String state="Unknown";
+                if(notStarted && !running &&!finished) state="Not Started";
+                else if(running || (notStarted && finished)) state = "Running";
+                else if(!notStarted && !running && finished) state = "Finished";
                 String s = "";
-                s+= "Round: " + String.valueOf(i) + " - Status:" + (running ? "Running" : ((finished && !running) ? "Complete" : "Not Started"));
+                s+= "Round: " + String.valueOf(i) + " - Status: " + state;
                 rounds.add(s);
             }
         }

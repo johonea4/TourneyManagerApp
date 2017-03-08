@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -133,7 +134,7 @@ public class CreateTourneyActivity extends Activity {
             errors++;
         }
         countVal = playerList.getCount();
-        if((countVal)<3)
+        if((countVal)<4 || !powerof2Check(countVal))
         {
             errors++;
         }
@@ -202,8 +203,13 @@ public class CreateTourneyActivity extends Activity {
             }
             m_app.setLastTourneyId(tourneyId);
             m_app.setTourneyRunning(true);
-            ((ManagerMode)m_mode).SetNextRound(-1,tourneyId,CreateTourneyActivity.this);
-            finish();
+            if(!((ManagerMode)m_mode).SetNextRound(-1,-1,tourneyId,CreateTourneyActivity.this))
+            {
+                Toast.makeText(CreateTourneyActivity.this,"Round 1 Info was unable to be created",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            m_app.setLastTourneyId(tourneyId);
+            m_app.setTourneyRunning(true);finish();
         }
     }
 
@@ -217,31 +223,36 @@ public class CreateTourneyActivity extends Activity {
     //TODO: Launch dialog with text field to enter players username
     public void onAddPlayer(View view)
     {
+        ArrayList<String> uNames = TourneyManagerDao.GetPlayerNames(CreateTourneyActivity.this);
+        if(uNames.size()<4)
+        {
+            Toast.makeText(CreateTourneyActivity.this,"Not enough Players have been added to the system!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final String [] names = uNames.toArray(new String[uNames.size()]);
+        final boolean [] checked = new boolean[uNames.size()];
+        for(int i=0;i<uNames.size();i++) {
+            if (players.contains(names[i])) checked[i] = true;
+            else checked[i] = false;
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(CreateTourneyActivity.this);
-        View mView = getLayoutInflater().inflate(R.layout.dialog_user_name,null);
-        final EditText mName = (EditText)mView.findViewById(R.id.nameField);
-        Button ok = (Button)mView.findViewById(R.id.buttonOK);
-        Button cancel = (Button)mView.findViewById(R.id.buttonCancel);
-        builder.setView(mView);
-        final AlertDialog dialog = builder.create();
-        //TODO: Set On Click Listeners
-        ok.setOnClickListener(new View.OnClickListener() {
+        builder.setTitle("Select Players");
+        builder.setMultiChoiceItems(names,checked,new Dialog.OnMultiChoiceClickListener(){
             @Override
-            public void onClick(View v) {
-                if(!mName.getText().toString().isEmpty()) {
-                    doAddPlayer(mName.getText().toString());
-                    dialog.hide();
-                }
-                else
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if(isChecked)
                 {
-                    Toast.makeText(CreateTourneyActivity.this,"Please Enter User Name",Toast.LENGTH_SHORT).show();
+                    if(!players.contains(names[which]))
+                        doAddPlayer(names[which]);
                 }
+                else if(players.contains(names[which])) players.remove(names[which]);
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener(){
+        final AlertDialog dialog = builder.create();
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                dialog.hide();
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
         dialog.show();

@@ -7,7 +7,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Arrays;
+import java.util.SortedSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Match;
@@ -143,19 +150,41 @@ public class ManagerMode extends AppMode
         TourneyManagerDao.addPrize(prize, context);
     }
 
-    public boolean SetNextRound(int curRoundId, int tid, Context context)
+    public int CheckRound(int rID, int tID, Context context)
+    {
+        Round.RoundState state = TourneyManagerDao.GetRoundState(rID,context);
+        if(state == Round.RoundState.FINISHED)
+        {
+            Set<Integer> rIds = TourneyManagerDao.GetMatchesByTourneyId(tID,context).keySet();
+            SortedSet<Integer> sorted = new TreeSet<Integer>(rIds);
+            Iterator<Integer> i = sorted.iterator();
+            while(i.hasNext())
+            {
+                int tmp = i.next();
+                if(tmp==rID && i.hasNext())
+                {
+                    return SetNextRound(rID,i.next(),tID,context)==true ? 1 : 0;
+                }
+            }
+            return -1;
+        }
+        return 1;
+    }
+
+    public boolean SetNextRound(int curRoundId, int nextRoundId, int tid, Context context)
     {
         if(curRoundId==-1)
         {
             Tournament t = TourneyManagerDao.GetActiveTournament(context);
             Round r = TourneyManagerDao.GetRound(tid,-1,context);
-            String [] n = t.getInfo().getUserNames().toArray(new String[t.getInfo().getUserNames().size()]);
-            int i=0;
+            Iterator<String> n = t.getInfo().getUserNames().iterator();
             for(Match m : r.getMatches())
             {
-                if(i<t.getInfo().getNumberOfEntrants()-1) {
-                    m.setPlayer1(n[i++]);
-                    m.setPlayer2(n[i++]);
+                if(n.hasNext()) {
+                    m.setPlayer1(n.next());
+                    if(n.hasNext())
+                        m.setPlayer2(n.next());
+                    else return false;
                 }
                 else return false;
                 TourneyManagerDao.UpdateMatch(m,context);
@@ -164,7 +193,7 @@ public class ManagerMode extends AppMode
         else
         {
             Round r1 = TourneyManagerDao.GetRound(tid,curRoundId,context);
-            Round r2 = TourneyManagerDao.GetRound(tid,curRoundId+1,context);
+            Round r2 = TourneyManagerDao.GetRound(tid,nextRoundId,context);
             String [] w = r1.getWinners().toArray(new String[r1.getWinners().size()]);
             int nWinners = r1.getWinners().size();
             int i=0;

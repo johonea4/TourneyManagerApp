@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
 import android.content.Context;
 
 import edu.gatech.seclass.tourneymanager.db.MatchDBHelper;
@@ -64,6 +66,12 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             playerDBHelper.updatePlayer(p);
         }
 
+        public static void RemovePlayer(String uName, Context context)
+        {
+            PlayerDBHelper playerDBHelper = new PlayerDBHelper(context);
+            playerDBHelper.deletePlayer(uName);
+        }
+
         public static List<Tournament> GetAllTournaments(Context context)
         {
             TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
@@ -111,7 +119,18 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
         {
             HashMap<Integer,ArrayList<Match> > MatchMap = TourneyManagerDao.GetMatchesByTourneyId(tid,context);
             List<Match> matches;
-            if(id==-1) matches = MatchMap.get(MatchMap.keySet().toArray()[0]);
+            if(id==-1)
+            {
+                Set keys = MatchMap.keySet();
+                Iterator<Integer> it = keys.iterator();
+                id = it.next();
+                while(it.hasNext())
+                {
+                    int tmp = it.next();
+                    id = tmp < id ? tmp : id;
+                }
+                matches = MatchMap.get(id);
+            }
             else matches = MatchMap.get(id);
             if(matches.size()<=0) return null;
             Round r = new Round(tid);
@@ -168,15 +187,17 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             List<Match> matches = TourneyManagerDao.GetMatchesByRoundId(roundId,context);
             boolean running = false;
             boolean finished = false;
+            boolean notstarted = false;
 
             for(Match m : matches)
             {
+                notstarted |= (!m.isRunning() && !m.isFinished());
                 running |= m.isRunning();
                 finished |= m.isFinished();
             }
-            if(!running && !finished) return Round.RoundState.NOT_STARTED;
-            if(running) return Round.RoundState.RUNNING;
-            if(!running && finished) return Round.RoundState.FINISHED;
+            if(notstarted && !running && !finished) return Round.RoundState.NOT_STARTED;
+            if(running || (notstarted &&finished)) return Round.RoundState.RUNNING;
+            if(!notstarted && !running && finished) return Round.RoundState.FINISHED;
             return Round.RoundState.NOT_STARTED;
         }
 
