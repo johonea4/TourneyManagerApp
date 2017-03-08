@@ -74,7 +74,7 @@ public class MatchDBHelper extends AbstractHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, match.getId());
-        values.put(KEY_WINNER, match.getWinners());
+        values.put(KEY_WINNER, match.getWinner());
         values.put(KEY_PLAYER1, match.getPlayer1());
         values.put(KEY_PLAYER2, match.getPlayer2());
         values.put(KEY_IS_RUNNING, intforboolean(match.isRunning()));
@@ -91,7 +91,7 @@ public class MatchDBHelper extends AbstractHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_ID, match.getId());
-        values.put(KEY_WINNER, match.getWinners());
+        values.put(KEY_WINNER, match.getWinner());
         values.put(KEY_PLAYER1, match.getPlayer1());
         values.put(KEY_PLAYER2, match.getPlayer2());
         values.put(KEY_IS_RUNNING, intforboolean(match.isRunning()));

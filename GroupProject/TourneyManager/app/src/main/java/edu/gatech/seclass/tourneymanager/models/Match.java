@@ -60,7 +60,7 @@ public class Match
         this.winner = winner;
     }
 
-    public String getWinners()
+    public String getWinner()
     {
         return winner;
     }

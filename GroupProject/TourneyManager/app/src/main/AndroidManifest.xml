@@ -25,7 +25,8 @@
         <activity android:name=".TourneyTotalsActivity" />
         <activity android:name=".RoundsListActivity" />
         <activity android:name=".RoundInfoActivity" />
-        <activity android:name=".MatchInfoActivity"></activity>
+        <activity android:name=".MatchInfoActivity" />
+        <activity android:name=".PlayerModeActivity"></activity>
     </application>
 
 </manifest>

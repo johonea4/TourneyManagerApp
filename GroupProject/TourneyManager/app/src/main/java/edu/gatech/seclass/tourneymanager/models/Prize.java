@@ -6,6 +6,7 @@ package edu.gatech.seclass.tourneymanager.models;
 
 public class Prize
 {
+    private String userName;
     private int place;
     private int tourneyId;
     private int MoneyWon;
@@ -13,6 +14,10 @@ public class Prize
     public int getPlace() {
         return place;
     }
+
+    public String getUserName() { return userName; }
+
+    public void setUserName(String userName) { this.userName = userName; }
 
     public void setPlace(int place) {
         this.place = place;

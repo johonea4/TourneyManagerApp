@@ -13,7 +13,6 @@ import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
-import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
 
 /**
  * Created by IndikaP on 3/2/17.
@@ -123,8 +122,8 @@ import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
             List<String> winners = new ArrayList<String>();
             for(Match m : matches)
             {
-                if(m.getWinners() != null && !m.getWinners().isEmpty())
-                    winners.add(m.getWinners());
+                if(m.getWinner() != null && !m.getWinner().isEmpty())
+                    winners.add(m.getWinner());
             }
             r.setWinners(winners);
 

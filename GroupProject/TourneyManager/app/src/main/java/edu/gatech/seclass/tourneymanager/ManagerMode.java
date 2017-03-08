@@ -2,13 +2,17 @@ package edu.gatech.seclass.tourneymanager;
 
 import android.content.Context;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Match;
 import edu.gatech.seclass.tourneymanager.models.Player;
+import edu.gatech.seclass.tourneymanager.models.Prize;
 import edu.gatech.seclass.tourneymanager.models.Round;
 import edu.gatech.seclass.tourneymanager.models.Tournament;
 import edu.gatech.seclass.tourneymanager.models.TourneyInfo;
@@ -71,6 +75,79 @@ public class ManagerMode extends AppMode
         }
 
         return true;
+    }
+
+    public boolean EndTournament(Context context){
+        try {
+            Tournament t = TourneyManagerDao.GetActiveTournament(context);
+            HashMap<Integer, ArrayList<Match>> matchMap = TourneyManagerDao.GetMatchesByTourneyId(t.getId(), context);
+            Set<Integer> keys = matchMap.keySet();
+            boolean isRoundRunning = false;
+            for (Integer i : keys) {
+                Round r = TourneyManagerDao.GetRound(t.getId(), i, context);
+                isRoundRunning = r.isRunning();
+            }
+            if (isRoundRunning) {
+                t.setEndedEarly(true);
+                TourneyManagerDao.updateTournament(t, context);
+                return false;
+
+                //method to check if all the rounds are being completed. call refund not.
+            }
+            else{
+                int lastMatchId = m_app.getLastMatchId();
+                int secondLastRoundId = m_app.getLastRoundId()-1;
+
+                Match lastMatch = TourneyManagerDao.GetMatchById(lastMatchId, context);
+                String winner = lastMatch.getWinner();
+                String runnerUp = lastMatch.getWinner().equals(lastMatch.getPlayer1()) ? lastMatch.getPlayer2() : lastMatch.getPlayer1();
+
+                //find the third place playoff
+                Round secondLastRound = TourneyManagerDao.GetRound(t.getId(), secondLastRoundId, context);
+                List<String> secondLastRoundWinners = secondLastRound.getWinners();
+                List<String> secondLastRoundPlayers = new ArrayList<String>();
+                List<Match> secondLastRoundMatches = secondLastRound.getMatches();
+
+                for(int i=0; i<secondLastRound.getMatches().size(); i++){
+                    secondLastRoundPlayers.add(secondLastRoundMatches.get(i).getPlayer1());
+                    secondLastRoundPlayers.add(secondLastRoundMatches.get(i).getPlayer2());
+                }
+                secondLastRoundPlayers.removeAll(Collections.singletonList(winner));
+                secondLastRoundPlayers.removeAll(Collections.singletonList(runnerUp));
+
+                String thirdPlacePlayoff = secondLastRoundPlayers.get(new Random().nextInt(secondLastRoundPlayers.size()));
+
+                //update the player prizes
+                updatePlayerPrizes(winner, t.getId(), 1, t.getInfo().getFirstPlacePrize(), context);
+                updatePlayerPrizes(runnerUp, t.getId(), 2, t.getInfo().getSecondPlacePrize(), context);
+                updatePlayerPrizes(thirdPlacePlayoff, t.getId(), 3, t.getInfo().getThirdPlacePrize(), context);
+
+                t.setFinished(true);
+                TourneyManagerDao.updateTournament(t, context);
+                return true;
+            }
+            //method to find if the tournament ended early. Not all the rounds are completed.
+            //update the tournament/ matches
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    private void updatePlayerPrizes(String player, int tId, int place, int money, Context context){
+
+        Player p = TourneyManagerDao.GetPlayerByUsername(player, context);
+        List<Prize> prizes = p.getPrizes();
+
+        Prize prize = new Prize();
+        prize.setUserName(player);
+        prize.setTourneyId(tId);
+        prize.setPlace(place);
+        prize.setMoneyWon(money);
+        prizes.add(prize);
+        p.setPrizes(prizes);
+
+        TourneyManagerDao.UpdatePlayer(p, context);
     }
 
     public boolean SetNextRound(int curRoundId, int tid, Context context)

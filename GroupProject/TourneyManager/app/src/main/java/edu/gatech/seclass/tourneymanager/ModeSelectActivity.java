@@ -30,7 +30,10 @@ public class ModeSelectActivity extends Activity
 
     public void startPlayerMode(View view)
     {
-
+        TourneyManagerApp a = (TourneyManagerApp) getApplication();
+        a.setAppMode(player);
+        Intent launchManager = new Intent(ModeSelectActivity.this,PlayerModeActivity.class);
+        startActivity(launchManager);
     }
 
     private AppMode manager;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ManagerModeActivity extends Activity
 {
@@ -59,9 +60,12 @@ public class ManagerModeActivity extends Activity
         {
             m_app.setTourneyRunning(false);
 
-            //method to find if the tournament ended early. Not all the rounds are completed.
-            //method to check if all the rounds are being completed. call refund not.
-            //update the tournament/ matches
+            if(!((ManagerMode)appMode).EndTournament(ManagerModeActivity.this)) {
+                Toast.makeText(ManagerModeActivity.this, "Money is refunded to the players.", Toast.LENGTH_LONG).show();
+            }
+            else{
+                //do nothing
+            }
 
             setButtons();
         }
