@@ -26,5 +26,6 @@ public abstract class AbstractHelper extends SQLiteOpenHelper{
         PlayerDBHelper.OnCreate(db);
         MatchDBHelper.OnCreate(db);
         TournamentDBHelper.OnCreate(db);
+        PrizeDBHelper.OnCreate(db);
     }
 }
