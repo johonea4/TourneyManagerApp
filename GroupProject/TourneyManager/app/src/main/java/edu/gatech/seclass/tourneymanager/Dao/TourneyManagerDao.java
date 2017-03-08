@@ -44,7 +44,7 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
                 Player p = it.next();
                 String uName = p.getUserName();
                 if (uName.compareTo(userName) == 0) {
-                    List<Prize> prizesForPlayer = getPrizes(uName, context);
+                    List<Prize> prizesForPlayer = getPrizesByUserName(uName, context);
                     p.setPrizes(prizesForPlayer);
                     return p;
                 }
@@ -200,10 +200,23 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             matchDBHelper.updateMatch(m);
         }
 
-        private static List<Prize> getPrizes(String userName, Context context){
+        public static void addPrize(Prize prize, Context context){
             PrizeDBHelper prizeDBHelper = new PrizeDBHelper(context);
-            List<Prize> prizesForPlayer = prizeDBHelper.getPrizes(userName);
+            prizeDBHelper.addPrize(prize);
+        }
 
+        private static List<Prize> getPrizesByUserName(String userName, Context context){
+            PrizeDBHelper prizeDBHelper = new PrizeDBHelper(context);
+            List<Prize> prizes = prizeDBHelper.getAllPrizes(userName);
+            List<Prize> prizesForPlayer = new ArrayList<Prize>();
+            Iterator<Prize> it = prizes.iterator();
+            while (it.hasNext()) {
+                Prize p = it.next();
+                String uName = p.getUserName();
+                if (uName.compareTo(userName) == 0) {
+                    prizesForPlayer.add(p);
+                }
+            }
             return prizesForPlayer;
         }
     }

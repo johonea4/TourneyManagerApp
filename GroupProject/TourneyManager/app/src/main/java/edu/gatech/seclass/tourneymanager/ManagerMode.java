@@ -118,9 +118,9 @@ public class ManagerMode extends AppMode
                 String thirdPlacePlayoff = secondLastRoundPlayers.get(new Random().nextInt(secondLastRoundPlayers.size()));
 
                 //update the player prizes
-                updatePlayerPrizes(winner, t.getId(), 1, t.getInfo().getFirstPlacePrize(), context);
-                updatePlayerPrizes(runnerUp, t.getId(), 2, t.getInfo().getSecondPlacePrize(), context);
-                updatePlayerPrizes(thirdPlacePlayoff, t.getId(), 3, t.getInfo().getThirdPlacePrize(), context);
+                addPlayerPrizes(winner, t.getId(), 1, t.getInfo().getFirstPlacePrize(), context);
+                addPlayerPrizes(runnerUp, t.getId(), 2, t.getInfo().getSecondPlacePrize(), context);
+                addPlayerPrizes(thirdPlacePlayoff, t.getId(), 3, t.getInfo().getThirdPlacePrize(), context);
 
                 t.setFinished(true);
                 TourneyManagerDao.updateTournament(t, context);
@@ -134,20 +134,13 @@ public class ManagerMode extends AppMode
         }
     }
 
-    private void updatePlayerPrizes(String player, int tId, int place, int money, Context context){
-
-        Player p = TourneyManagerDao.GetPlayerByUsername(player, context);
-        List<Prize> prizes = p.getPrizes();
-
+    private void addPlayerPrizes(String player, int tId, int place, int money, Context context){
         Prize prize = new Prize();
         prize.setUserName(player);
         prize.setTourneyId(tId);
         prize.setPlace(place);
         prize.setMoneyWon(money);
-        prizes.add(prize);
-        p.setPrizes(prizes);
-
-        TourneyManagerDao.UpdatePlayer(p, context);
+        TourneyManagerDao.addPrize(prize, context);
     }
 
     public boolean SetNextRound(int curRoundId, int tid, Context context)
