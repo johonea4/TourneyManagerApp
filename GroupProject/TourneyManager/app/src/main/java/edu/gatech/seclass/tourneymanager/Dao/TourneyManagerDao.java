@@ -72,6 +72,13 @@ import edu.gatech.seclass.tourneymanager.models.Tournament;
             playerDBHelper.deletePlayer(uName);
         }
 
+
+        public static Tournament GetTournamentById(int id, Context context)
+        {
+            TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
+            return tournamentDBHelper.getTournament(id);
+        }
+
         public static List<Tournament> GetAllTournaments(Context context)
         {
             TournamentDBHelper tournamentDBHelper = new TournamentDBHelper(context);
