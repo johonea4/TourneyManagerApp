@@ -105,6 +105,25 @@ public class CreateTourneyActivity extends Activity {
             housePercent.setEnabled(true);
             tourneyID.setEnabled(true);
         }
+        else if(i.getBooleanExtra("viewTourneyInfo",true))
+        {
+            String tId = getIntent().getStringExtra("tourneyId");
+            Tournament t = TourneyManagerDao.GetTournamentById(Integer.parseInt(tId), CreateTourneyActivity.this);
+            startButton.setVisibility(View.GONE);
+            addPlayer.setVisibility(View.GONE);
+            removePlayer.setVisibility(View.GONE);
+            if(t!=null){
+                tourneyID.setText(t.getId());
+                playerFee.setText(t.getInfo().getEntryPrice());
+                housePercent.setText(t.getInfo().getHousePercent());
+                houseCut.setText(t.getInfo().getHouseCut());
+                firstPlace.setText(t.getInfo().getFirstPlacePrize());
+                secondPlace.setText(t.getInfo().getSecondPlacePrize());
+                thirdPlace.setText(t.getInfo().getThirdPlacePrize());
+                ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.list_create_tourney,t.getInfo().getUserNames());
+                playerList.setAdapter(adapter);
+            }
+        }
         else
         {
             addPlayer.setVisibility(View.INVISIBLE);
