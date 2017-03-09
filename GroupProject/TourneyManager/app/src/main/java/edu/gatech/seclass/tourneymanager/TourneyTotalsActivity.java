@@ -57,8 +57,8 @@ public class TourneyTotalsActivity extends Activity {
         ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tourneyIds);
         tourneyList.setAdapter(adapter);
         numTourneys.setText(Integer.toString(allTourneys.size()));
-        refunded.setText(Integer.toString(refundedVal));
-        profit.setText(Integer.toString(houseCutVal));
+        refunded.setText("$"+Integer.toString(refundedVal)+".00");
+        profit.setText("$"+Integer.toString(houseCutVal)+".00");
 
 
     }

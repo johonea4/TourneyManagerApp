@@ -113,15 +113,16 @@ public class CreateTourneyActivity extends Activity {
             addPlayer.setVisibility(View.GONE);
             removePlayer.setVisibility(View.GONE);
             if(t!=null){
-                tourneyID.setText(t.getId());
-                playerFee.setText(t.getInfo().getEntryPrice());
-                housePercent.setText(t.getInfo().getHousePercent());
-                houseCut.setText(t.getInfo().getHouseCut());
-                firstPlace.setText(t.getInfo().getFirstPlacePrize());
-                secondPlace.setText(t.getInfo().getSecondPlacePrize());
-                thirdPlace.setText(t.getInfo().getThirdPlacePrize());
+                tourneyID.setText(Integer.toString(t.getId()));
+                playerFee.setText(Integer.toString(t.getInfo().getEntryPrice()));
+                housePercent.setText(Integer.toString(t.getInfo().getHousePercent()));
+                houseCut.setText(Integer.toString(t.getInfo().getHouseCut()));
+                firstPlace.setText(Integer.toString(t.getInfo().getFirstPlacePrize()));
+                secondPlace.setText(Integer.toString(t.getInfo().getSecondPlacePrize()));
+                thirdPlace.setText(Integer.toString(t.getInfo().getThirdPlacePrize()));
                 ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.list_create_tourney,t.getInfo().getUserNames());
                 playerList.setAdapter(adapter);
+                housePercent.setError(null);
             }
         }
         else

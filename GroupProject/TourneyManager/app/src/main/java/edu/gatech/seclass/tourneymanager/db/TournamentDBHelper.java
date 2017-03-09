@@ -119,7 +119,8 @@ public class TournamentDBHelper extends AbstractHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_TOURNAMENT, new String[] {
-                        KEY_ID, KEY_IS_RUNNING, KEY_IS_ENDED_EARLY },
+                        KEY_ID, KEY_IS_RUNNING, KEY_IS_ENDED_EARLY, KEY_HOUSE_PERCENT,
+                        KEY_PLAYER_FEE, KEY_NUM_ENTRANTS, KEY_PLAYER_LIST},
                 KEY_ID + "=?",
                 new String[] { String.valueOf(key) }, null, null, null, null);
         if (cursor != null)
@@ -139,7 +140,7 @@ public class TournamentDBHelper extends AbstractHelper {
         ArrayList<String> uNames = new ArrayList<String>();
         String pList = cursor.getString(6);
         tok = Arrays.asList(pList.split(";"));
-        for(String s : uNames)
+        for(String s : tok)
         {
             if(s!=null && !s.isEmpty())
             {
