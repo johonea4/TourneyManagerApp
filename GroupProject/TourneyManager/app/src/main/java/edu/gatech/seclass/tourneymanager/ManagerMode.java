@@ -89,12 +89,14 @@ public class ManagerMode extends AppMode
             Tournament t = TourneyManagerDao.GetActiveTournament(context);
             HashMap<Integer, ArrayList<Match>> matchMap = TourneyManagerDao.GetMatchesByTourneyId(t.getId(), context);
             Set<Integer> keys = matchMap.keySet();
-            boolean isRoundRunning = false;
+            boolean isRunningOrNotStarted = false;
             for (Integer i : keys) {
                 Round r = TourneyManagerDao.GetRound(t.getId(), i, context);
-                isRoundRunning = r.isRunning();
+                isRunningOrNotStarted |= TourneyManagerDao.GetRoundState(i, context) == Round.RoundState.NOT_STARTED ||
+                                            TourneyManagerDao.GetRoundState(i, context) == Round.RoundState.RUNNING;
             }
-            if (isRoundRunning) {
+            if (isRunningOrNotStarted) {
+                t.setRunning(false);
                 t.setEndedEarly(true);
                 TourneyManagerDao.updateTournament(t, context);
                 return false;
@@ -129,6 +131,7 @@ public class ManagerMode extends AppMode
                 addPlayerPrizes(runnerUp, t.getId(), 2, t.getInfo().getSecondPlacePrize(), context);
                 addPlayerPrizes(thirdPlacePlayoff, t.getId(), 3, t.getInfo().getThirdPlacePrize(), context);
 
+                t.setRunning(false);
                 t.setFinished(true);
                 TourneyManagerDao.updateTournament(t, context);
                 return true;
