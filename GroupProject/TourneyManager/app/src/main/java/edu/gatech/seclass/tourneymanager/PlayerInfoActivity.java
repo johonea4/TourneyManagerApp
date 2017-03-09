@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.gatech.seclass.tourneymanager.Dao.TourneyManagerDao;
 import edu.gatech.seclass.tourneymanager.models.Player;
+import edu.gatech.seclass.tourneymanager.models.Prize;
 
 public class PlayerInfoActivity extends Activity {
 
@@ -32,8 +38,12 @@ public class PlayerInfoActivity extends Activity {
         username = (EditText)findViewById(R.id.userNameField);
         phone = (EditText)findViewById(R.id.phoneField);
         deckChoice = (Spinner)findViewById(R.id.deckChoiceSpinner);
-        adapter = ArrayAdapter.createFromResource(this, R.array.deckChoice_array, android.R.layout.simple_spinner_item);
+        adapter = ArrayAdapter.createFromResource(PlayerInfoActivity.this, R.array.deckChoice_array, android.R.layout.simple_spinner_item);
+        prizes = new ArrayList<String>();
+        prizeAdapter = new ArrayAdapter<String>(PlayerInfoActivity.this,android.R.layout.simple_list_item_1,prizes);
         deckChoice.setAdapter(adapter);
+        prizeList.setAdapter(prizeAdapter);
+        setPrizeListcb();
     }
 
     @Override
@@ -65,13 +75,14 @@ public class PlayerInfoActivity extends Activity {
             phone.setInputType(InputType.TYPE_CLASS_PHONE);
             deckChoice.setEnabled(true);
             String p = getIntent().getStringExtra("playerUserName");
-            Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
-            if(po!=null)
+            curPlayer = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
+            if(curPlayer!=null)
             {
-                name.setText(po.getName());
-                username.setText(po.getUserName());
-                phone.setText(String.valueOf(po.getPhoneNumber()));
-                deckChoice.setSelection(adapter.getPosition(po.getDeckChoice()));
+                name.setText(curPlayer.getName());
+                username.setText(curPlayer.getUserName());
+                phone.setText(String.valueOf(curPlayer.getPhoneNumber()));
+                deckChoice.setSelection(adapter.getPosition(curPlayer.getDeckChoice()));
+                populatePrizes();
             }
             else
                 finish();
@@ -86,13 +97,14 @@ public class PlayerInfoActivity extends Activity {
             phone.setInputType(InputType.TYPE_NULL);
             deckChoice.setEnabled(false);
             String p = getIntent().getStringExtra("playerUserName");
-            Player po = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
-            if(po!=null)
+            curPlayer = TourneyManagerDao.GetPlayerByUsername(p, PlayerInfoActivity.this);
+            if(curPlayer!=null)
             {
-                name.setText(po.getName());
-                username.setText(po.getUserName());
-                phone.setText(String.valueOf(po.getPhoneNumber()));
-                deckChoice.setSelection(adapter.getPosition(po.getDeckChoice()));
+                name.setText(curPlayer.getName());
+                username.setText(curPlayer.getUserName());
+                phone.setText(String.valueOf(curPlayer.getPhoneNumber()));
+                deckChoice.setSelection(adapter.getPosition(curPlayer.getDeckChoice()));
+                populatePrizes();
             }
             else
                 finish();
@@ -102,7 +114,38 @@ public class PlayerInfoActivity extends Activity {
     }
 
     //TODO: Populate PrizeList and set action to show prize info Activity
+    public void populatePrizes()
+    {
+        prizes.clear();
+        List<Prize> pList = curPlayer.getPrizes();
+        for(Prize p : pList)
+        {
+            String s = "Tournament #: ";
+            s += String.valueOf(p.getTourneyId());
+            s += " - $";
+            s += String.valueOf(p.getMoneyWon());
+            prizes.add(s);
+        }
+        prizeAdapter.notifyDataSetChanged();
+    }
+    public void setPrizeListcb()
+    {
+        prizeList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView item = (TextView)view;
+                String s = item.getText().toString();
+                String num = s.substring(13,s.indexOf('-'));
+                num = num.replaceAll(" ","");
+                int n = Integer.parseInt(num);
 
+                Intent i = new Intent(PlayerInfoActivity.this, PrizeInfoActivity.class);
+                i.putExtra("tourneyId",n);
+                i.putExtra("uname",curPlayer.getUserName());
+                startActivity(i);
+            }
+        });
+    }
     public void onCreatePlayer(View view)
     {
         //TODO: Handle adding the player and checking for errors
@@ -167,5 +210,9 @@ public class PlayerInfoActivity extends Activity {
     private EditText username;
     private EditText phone;
     private Spinner deckChoice;
-    ArrayAdapter<CharSequence> adapter;
+    private ArrayAdapter<CharSequence> adapter;
+    private ArrayAdapter<String> prizeAdapter;
+    private ArrayList<String> prizes;
+    private Player curPlayer;
+
 }
