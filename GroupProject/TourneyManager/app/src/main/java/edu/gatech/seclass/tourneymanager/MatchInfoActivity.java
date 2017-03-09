@@ -89,6 +89,7 @@ public class MatchInfoActivity extends Activity {
             match.setRunning(false);
             match.setFinished(true);
             final AlertDialog.Builder builder = new AlertDialog.Builder(MatchInfoActivity.this);
+            builder.setTitle("Choose Winner");
             View mView = getLayoutInflater().inflate(R.layout.dialog_select_winner,null);
             Button p1Button = (Button)mView.findViewById(R.id.player1Button);
             Button p2Button = (Button)mView.findViewById(R.id.player2Button);

@@ -40,7 +40,13 @@ public class Player
 
     public int GetPlayerTotals()
     {
-        return 0;
+        int total = 0;
+        if(this.prizes==null) return 0;
+        for(Prize p : this.prizes)
+        {
+            total += p.getMoneyWon();
+        }
+        return total;
     }
 
     public void setName(String name)

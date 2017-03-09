@@ -264,7 +264,12 @@ public class CreateTourneyActivity extends Activity {
                     if(!players.contains(names[which]))
                         doAddPlayer(names[which]);
                 }
-                else if(players.contains(names[which])) players.remove(names[which]);
+                else if(players.contains(names[which]))
+                {
+                    players.remove(names[which]);
+                    playersAdapter.notifyDataSetChanged();
+                    recalculate();
+                }
             }
         });
         final AlertDialog dialog = builder.create();
