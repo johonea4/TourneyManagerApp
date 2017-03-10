@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ModeSelectActivityTest {
+public class ModeSelectActivityInstrumentedTest {
 
     @Rule
     public ActivityTestRule mActivityRule = new ActivityTestRule<>(ModeSelectActivity.class);

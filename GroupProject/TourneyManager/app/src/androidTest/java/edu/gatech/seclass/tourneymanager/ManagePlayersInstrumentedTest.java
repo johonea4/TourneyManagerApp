@@ -19,8 +19,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by rugrani on 3/9/17.
  */
-
-public class ManagePlayers {
+@RunWith(AndroidJUnit4.class)
+@LargeTest
+public class ManagePlayersInstrumentedTest {
 
     @Rule
     public ActivityTestRule mActivityRule = new ActivityTestRule<>(ManagePlayersActivity.class);
