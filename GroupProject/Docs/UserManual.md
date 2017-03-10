@@ -83,7 +83,27 @@ When the winner is confirmed, the match will update and the corresponding round 
 
 Once all matches for a round have been completed, the next round will auto-populate its matches with the remaining winning players. Once all rounds have completed, a Toast notification will display stating all matches have been completed. At this point, the manager is able to end the tournament.
 
+## Viewing Player Totals
+The manager and player are able to view a list of players sorted by their total winnings. To do this, press the "View Player Totals" button on either the Manager or Player panel. A list will be displayed as follows:
 
+<img src="./images/playerTotals.png" width="270" height="480" />
+
+The user is then able to select a player, and it will bring them to the player information panel. The player info panel displays the player's information as well as the list of tournaments they won prizes in.
+
+<img src="./images/playerInfo.png" width="270" height="480" />
+
+To view the information of a won prize, select the tournament, and the following information will be displayed.
+
+<img src="./images/prizeInfo.png" width="270" height="480" />
+
+## Viewing Tournament Totals
+The manager is able to view a list of completed tournaments sorted by the profit totals for the house. This screen will give the manager a total overview of profits, amount refunded, and number of tournaments completed. Each item in the tournament list will display the tournament ID, the profit amounts, and will indicate if a tournament was refunded.
+
+<img src="./images/tourneyTotals.png" width="270" height="480" />
+
+If the manager wishes to view the tournament iformation, simply select a tournament and the following information will be displayed.
+
+<img src="./images/tourneyInfo.png" width="270" height="480" />
 
 
 
