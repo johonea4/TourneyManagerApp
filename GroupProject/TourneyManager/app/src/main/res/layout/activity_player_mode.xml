@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="130dp"
             android:onClick="PlayerTotalsLauncher"
-            android:text="VIew Player Totals" />
+            android:text="View Player Totals" />
 
         <Button
             android:id="@+id/roundsButton_player"
