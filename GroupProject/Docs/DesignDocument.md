@@ -16,7 +16,7 @@ The app will not provide Authentication support.
 ### 1.2 Constraints
 
 Since the app uses SQLite database for Android, multi-device is not supported. Data saved in one device cannot be used in another device.
-The smooth functioning of the app on every android device cannot guaranteed since we will be testing the app on only some emulators.
+The smooth functioning of the app on every android device cannot guaranteed since the app will be tested on only some emulators.
 	
 	
 ### 1.3 System Environment
