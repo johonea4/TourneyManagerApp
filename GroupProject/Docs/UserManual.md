@@ -6,4 +6,4 @@
 
 When opening the Tourney Manager App, the user is given the choice of which mode they wish to use. The choices are "Manager" or "Player".
 
-<img style="width:540; height:960;" src="./images/selectMode.png">
+<img src="./images/selectMode.png" style="width:540; height:960;"/>
